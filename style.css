@@ -1,0 +1,24 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+
+
+div#camera.hover-stats {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.hud {
+  display: flex;
+  width: 200px;
+  align-items: center;
+  color: white;
+  padding: 1rem;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.71);
+}
