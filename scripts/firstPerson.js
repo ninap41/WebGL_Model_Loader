@@ -4,17 +4,21 @@ let movedY = 0
 let pmouseX = 0
 let pmouseY = 0
 // this is needed to catch the exit from pointerLock when user presses ESCAPE
+
 function mousePressed() {
 	if (mouseIsPressed) return "I am pressed"
 	else return "not"
 }
 
-function mouseClicked() {
-	if (!window.pointerLock) {
-		window.pointerLock = true
-	} else {
-		window.pointerLock = false
+function keyPressed() {
+		if (key === 'c') {
+			if (!window.pointerLock) {
+				window.pointerLock = true
+			} else {
+				window.pointerLock = false
+			}
 	}
+
 }
 
 function firstPerson(cam) {
@@ -100,7 +104,8 @@ function firstPerson(cam) {
 	    <br>
 	    centerX  ${devTools().colorKey(Math.floor(cam.centerX))} <br>  
 		  centerY ${devTools().colorKey(Math.floor(cam.centerY))} <br>
-		   centerZ ${devTools().colorKey(Math.floor(cam.centerZ))}<br></div> `
+		   centerZ ${devTools().colorKey(Math.floor(cam.centerZ))}<br></div> 
+			 `
 		/* camera([x], [y], [z], [centerX], [centerY], [centerZ], [upX], [upY], [upZ]) */
 	}
 }

@@ -1,6 +1,6 @@
 window.addEventListener(
 	"keydown",
-	function (e) {
+	function(e) {
 		// Prevent default behavior for arrow keys
 		if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
 			e.preventDefault()
@@ -9,4 +9,4 @@ window.addEventListener(
 	{ passive: false }
 )
 
-window.pointerLock = false
+

@@ -1,22 +1,39 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<script src="./scripts/lib/p5.min.js"></script>
-		<script src="./scripts/lib/p5.dom.min.js"></script>
-		<script src="./scripts/lib/p5.sound.min.js"></script>
 
-		<link rel="stylesheet" type="text/css" href="style.css" />
-		<meta charset="utf-8" />
-	</head>
-	<body>
-		<div id="camera" class="hover-stats"></div>
-		<script src="scripts/windowEvents.js" defer></script>
-		<script src="scripts/devConfig.js"></script>
-		<script src="scripts/loadModels.js" defer></script>
+<head>
+	<script src="./scripts/lib/p5.latest.js"></script>
+	<script src="./scripts/lib/p5.dom.min.js"></script>
+	<script src="./scripts/lib/p5.sound.min.js"></script>
 
-		<script src="scripts/loadTextures.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<meta charset="utf-8" />
+</head>
 
-		<script src="scripts/firstPerson.js" defer></script>
-		<script src="sketch.js" defer></script>
-	</body>
+<body>
+	<script>
+		window.pointerLock = false
+		window.desk = [-42, 120, 0]
+	</script>
+	<div id="camera" class="hover-stats"></div>
+	<div id="translator-container" class="translator-stats"></div>
+
+	<button id="reload" onclick=" window.location.reload()">Reload</button>
+	<p id="controls" onclick=" window.location.reload()">W-A-S-D Controls <br> Press 'C' to toggle look around mode with
+		mouse</p>
+
+	<script src="scripts/windowEvents.js" defer></script>
+
+	<script src="scripts/devConfig.js"></script>
+	<script src="scripts/translatorHud.js"></script>
+	<script src="scripts/loadModels.js" defer></script>
+
+	<script src="scripts/loadTextures.js" defer></script>
+
+	<script src="scripts/firstPerson.js" defer></script>
+
+	<script src="sketch.js" defer></script>
+
+</body>
+
 </html>

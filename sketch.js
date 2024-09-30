@@ -1,6 +1,6 @@
 const roamEnabled = true
 let angle = 45
-let canvas
+window.canvas
 let textureMap
 let modelMap
 
@@ -8,13 +8,14 @@ let gameStart = true
 let cam1
 
 function preload() {
+	modelMap = ModelModule()
 	textureMap = TextureModule()
-
-	// modelMap = ModelModule()
 }
+
 function setup() {
-	canvas = createCanvas(windowWidth, windowHeight, WEBGL)
-	cam1 = createCamera()
+	window.canvas = createCanvas(windowWidth, windowHeight, WEBGL)
+	cam1 = createCamera(1000, 1000, 1000)
+
 }
 
 function loadRoom() {
@@ -76,10 +77,23 @@ function loadRoom() {
 	pop()
 }
 
+
+function loadModels_() {
+	push()
+	translate(window.desk[0], window.desk[1], window.desk[2])
+	rotateX(PI/2)
+	texture(textureMap["wood"])
+	model(modelMap["desk"])
+	pop()
+
+}
+
 function draw() {
 	background(0)
+	stroke(0);
+	strokeWeight(0);
 	loadRoom()
-
+	loadModels_()
 	firstPerson(cam1)
 	// let halfWidth = planeWidth / 2;
 	// let halfHeight = planeHeight / 2;
