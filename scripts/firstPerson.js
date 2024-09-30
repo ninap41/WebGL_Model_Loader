@@ -22,14 +22,18 @@ function keyPressed() {
 function firstPerson(cam) {
 	const moveSpeed = 10
 	const lookSpeed = .5; // the implementation of this may be incorrect, but it works for now. remove multiplication at camX, Y, Z and figure out where to multiple properly ( to do)
-
+// const startingState = {
+// 	"azimuth":-1.5707963267948966,"zenith":0,"lookAtDist":0,"mousePrevX":546,"mousePrevY":406.5
+// }
 	cam.firstPersonState = cam.firstPersonState || {
 		azimuth: -atan2(cam.eyeZ - cam.centerZ, cam.eyeX - cam.centerX),
 		zenith: -atan2(cam.eyeY - cam.centerY, dist(cam.eyeX, cam.eyeZ, cam.centerX, cam.centerZ)),
-		lookAtDist: dist(cam.eyeX, cam.eyeY, cam.eyeZ, cam.centerX, cam.centerY, cam.centerZ),
+		lookAtDist: dist(cam.eyeX, cam.eyeY, cam.eyeZ, cam.centerX, cam.centerY, cam.centerZ) ,
 		mousePrevX: mouseX / 2 + mouseX,
 		mousePrevY:  mouseY / 2 + mouseY,
 	}
+		// 	console.log(JSON.stringify( cam.firstPersonState ))
+		// noLoop()
 		// Look around controls
 	/*
 	
