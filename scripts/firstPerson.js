@@ -3,8 +3,7 @@ let movedX = 0
 let movedY = 0
 let pmouseX = 0
 let pmouseY = 0
-// this is needed to catch the exit from pointerLock when user presses ESCAPE
-
+/* to do - move center mouse https://www.geeksforgeeks.org/how-to-move-mouse-pointer-to-a-specific-position-using-javascript/ */
 function mousePressed() {
 	if (mouseIsPressed) return "I am pressed"
 	else return "not"
@@ -18,25 +17,28 @@ function keyPressed() {
 				window.pointerLock = false
 			}
 	}
-
 }
 
 function firstPerson(cam) {
-	const lookSpeed = 0.9
-	const moveSpeed = 5
+	const moveSpeed = 10
+	const lookSpeed = .5; // the implementation of this may be incorrect, but it works for now. remove multiplication at camX, Y, Z and figure out where to multiple properly ( to do)
 
 	cam.firstPersonState = cam.firstPersonState || {
 		azimuth: -atan2(cam.eyeZ - cam.centerZ, cam.eyeX - cam.centerX),
 		zenith: -atan2(cam.eyeY - cam.centerY, dist(cam.eyeX, cam.eyeZ, cam.centerX, cam.centerZ)),
 		lookAtDist: dist(cam.eyeX, cam.eyeY, cam.eyeZ, cam.centerX, cam.centerY, cam.centerZ),
-		mousePrevX: mouseX,
-		mousePrevY: mouseY,
+		mousePrevX: mouseX / 2 + mouseX,
+		mousePrevY:  mouseY / 2 + mouseY,
 	}
-	if (window.pointerLock) {
 		// Look around controls
-		cam.firstPersonState.azimuth -= (mouseX - cam.firstPersonState.mousePrevX) / 100
-		if (abs(cam.firstPersonState.zenith + (mouseY - cam.firstPersonState.mousePrevY) / 100) < PI / 2)
-			cam.firstPersonState.zenith += (mouseY - cam.firstPersonState.mousePrevY) / 100
+	/*
+	
+	(mouseX / 2 + mouseX) && (mouseY / 2 + mouseY) 
+	
+	!!this LOGIC is so IMPORTANT when activating the cursor. it offsets the position of the cursor that the center of the screen is at 0,0 vector */
+		cam.firstPersonState.azimuth -= ((mouseX / 2 + mouseX) - cam.firstPersonState.mousePrevX) / 100
+		if (abs(cam.firstPersonState.zenith + ((mouseY / 2 + mouseY) - cam.firstPersonState.mousePrevY) / 100) < PI / 2)
+			cam.firstPersonState.zenith += ((mouseY / 2 + mouseY) - cam.firstPersonState.mousePrevY) / 100
 
 		// Movement controls
 		if (keyIsDown(87) || keyIsDown(UP_ARROW)) {
@@ -57,31 +59,33 @@ function firstPerson(cam) {
 		}
 
 		// Update previous mouse position
-		cam.firstPersonState.mousePrevX = mouseX
-		cam.firstPersonState.mousePrevY = mouseY
+		cam.firstPersonState.mousePrevX =(mouseX / 2 + mouseX) 
+		cam.firstPersonState.mousePrevY = (mouseY / 2 +  mouseY)
 
 		// Update the look-at point
 		cam.centerX =
-			cam.eyeX - cam.firstPersonState.lookAtDist * (cos(cam.firstPersonState.zenith) * cos(cam.firstPersonState.azimuth))
-		cam.centerY = cam.eyeY + cam.firstPersonState.lookAtDist * sin(cam.firstPersonState.zenith)
+			(cam.eyeX - cam.firstPersonState.lookAtDist * (cos(cam.firstPersonState.zenith) * cos(cam.firstPersonState.azimuth))) * lookSpeed
+		cam.centerY = (cam.eyeY + cam.firstPersonState.lookAtDist * sin(cam.firstPersonState.zenith)) * lookSpeed
 		cam.centerZ =
-			cam.eyeZ + cam.firstPersonState.lookAtDist * (cos(cam.firstPersonState.zenith) * sin(cam.firstPersonState.azimuth))
+			(cam.eyeZ + cam.firstPersonState.lookAtDist * (cos(cam.firstPersonState.zenith) * sin(cam.firstPersonState.azimuth))) *lookSpeed
 
-		// Call the built in p5 function 'camera' to position and orient the camera
+	if (window.pointerLock) {
+
 		camera(
-			cam.eyeX,
+			cam.eyeX, // position of person
 			cam.eyeY,
-			cam.eyeZ, // position
-			cam.centerX * lookSpeed,
-			cam.centerY * lookSpeed,
-			cam.centerZ * lookSpeed, // look-at
+			cam.eyeZ,
+			cam.centerX,// rotation of cameraww
+			cam.centerY,
+			cam.centerZ, 
 			0,
 			1,
 			0
 		) // up vector
+
 		noCursor()
 	} else {
-		cursor() // Restore default cursor
+	   cursor( 'crosshair', cam.firstPersonState.mousePrevX, cam.firstPersonState.mousePrevY) // Restore default cursor
 	}
 
 	if (devConfig.devMode) {

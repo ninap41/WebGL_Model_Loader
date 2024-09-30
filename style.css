@@ -18,7 +18,13 @@ div#translator-container.translator-stats {
   left: 0;
 }
 
-.hud, .translator{
+.translator-items {
+  display: flex; 
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.hud {
   display: flex;
   width: 200px;
   align-items: center;
@@ -28,12 +34,27 @@ div#translator-container.translator-stats {
   background-color: rgba(0, 0, 0, 0.71);
 }
 
+.translator {
+  width: 200px;
+  color: white;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.71);
+}
 
 #reload {
   position: absolute;
   z-index: 1;
   top: 0;
   left:0;
+  color: white;
+  background-color: black;
+}
+
+#controls {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 50%;
   color: white;
   background-color: black;
 }

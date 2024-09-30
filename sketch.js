@@ -14,7 +14,7 @@ function preload() {
 
 function setup() {
 	window.canvas = createCanvas(windowWidth, windowHeight, WEBGL)
-	cam1 = createCamera(1000, 1000, 1000)
+	cam1 = createCamera()
 
 }
 
