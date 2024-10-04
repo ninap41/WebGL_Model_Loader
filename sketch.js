@@ -94,25 +94,11 @@ function loadModels_() {
 function draw() {
 	background(0)
 	stroke(0);
-	strokeWeight(0);
-  // 	debugMode(GRID, 50, 10, 0, 20, 0);
-	// // Add a white point light from the front.
-	// let c = color(255, 255, 0);
-	// let lightPos = createVector(100, 100, 100);
-	// pointLight(c, lightPos);
-	// lightFalloff(1, 0, 0);
-	 noStroke();
-	loadRoom()
 
-	// Style the spheres.
 	noStroke();
-
-
+	loadRoom()
 	loadModels_()
 	firstPerson(cam1)
-
-	
-
 	// let halfWidth = planeWidth / 2;
 	// let halfHeight = planeHeight / 2;
 
