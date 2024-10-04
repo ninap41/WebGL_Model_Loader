@@ -80,10 +80,13 @@ function loadRoom() {
 
 function loadModels_() {
 	push()
+
+
 	translate(window.desk[0], window.desk[1], window.desk[2])
 	rotateX(PI/2)
 	texture(textureMap["wood"])
 	model(modelMap["desk"])
+
 	pop()
 
 }
@@ -92,9 +95,24 @@ function draw() {
 	background(0)
 	stroke(0);
 	strokeWeight(0);
+  // 	debugMode(GRID, 50, 10, 0, 20, 0);
+	// // Add a white point light from the front.
+	// let c = color(255, 255, 0);
+	// let lightPos = createVector(100, 100, 100);
+	// pointLight(c, lightPos);
+	// lightFalloff(1, 0, 0);
+	 noStroke();
 	loadRoom()
+
+	// Style the spheres.
+	noStroke();
+
+
 	loadModels_()
 	firstPerson(cam1)
+
+	
+
 	// let halfWidth = planeWidth / 2;
 	// let halfHeight = planeHeight / 2;
 

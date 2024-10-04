@@ -20,6 +20,7 @@ function keyPressed() {
 }
 
 function firstPerson(cam) {
+	cam.perspective(0.5)
 	const moveSpeed = 10
 	const lookSpeed = .5; // the implementation of this may be incorrect, but it works for now. remove multiplication at camX, Y, Z and figure out where to multiple properly ( to do)
 // const startingState = {
