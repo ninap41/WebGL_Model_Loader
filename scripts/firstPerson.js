@@ -39,7 +39,6 @@ function firstPerson(cam) {
 	/*
 	
 	(mouseX / 2 + mouseX) && (mouseY / 2 + mouseY) 
-	
 	!!this LOGIC is so IMPORTANT when activating the cursor. it offsets the position of the cursor that the center of the screen is at 0,0 vector */
 		cam.firstPersonState.azimuth -= ((mouseX / 2 + mouseX) - cam.firstPersonState.mousePrevX) / 100
 		if (abs(cam.firstPersonState.zenith + ((mouseY / 2 + mouseY) - cam.firstPersonState.mousePrevY) / 100) < PI / 2)

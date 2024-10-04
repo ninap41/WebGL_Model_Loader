@@ -3,13 +3,12 @@ let angle = 45
 window.canvas
 let textureMap
 let modelMap
-
 let gameStart = true
 let cam1
 
 function preload() {
-	modelMap = ModelModule()
-	textureMap = TextureModule()
+	modelMap = ModelModule().modelMap
+	textureMap = ModelModule().textureMap
 }
 
 function setup() {
@@ -78,17 +77,13 @@ function loadRoom() {
 }
 
 
-function loadModels_() {
+function loadModel_() {
 	push()
-
-
-	translate(window.desk[0], window.desk[1], window.desk[2])
+	translate(window.targetObject[0], window.targetObject[1], window.targetObject[2])
 	rotateX(PI/2)
 	texture(textureMap["wood"])
 	model(modelMap["desk"])
-
 	pop()
-
 }
 
 function draw() {
@@ -97,14 +92,7 @@ function draw() {
 
 	noStroke();
 	loadRoom()
-	loadModels_()
+	loadModel_()
 	firstPerson(cam1)
-	// let halfWidth = planeWidth / 2;
-	// let halfHeight = planeHeight / 2;
 
-	// // Coordinates of the four corners
-	// let topLeft = createVector(-halfWidth, 0, -halfHeight);
-	// let topRight = createVector(halfWidth, 0, -halfHeight);
-	// let bottomRight = createVector(halfWidth, 0, halfHeight);
-	// let bottomLeft = createVector(-halfWidth, 0, halfHeight);
 }
