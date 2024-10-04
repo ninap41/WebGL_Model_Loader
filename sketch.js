@@ -61,7 +61,7 @@ function loadRoom() {
 
 	//Back
 	push()
-	translate(0, 0, -room.center)
+	translate(0, 0, - room.center)
 	rotateY(PI)
 	texture(textureMap["brick"])
 	plane(room.w, room.wallHeight) // Left wall
@@ -69,7 +69,7 @@ function loadRoom() {
 
 	// //Front
 	push()
-	translate(0, 0, +room.center)
+	translate(0, 0, + room.center)
 	rotateY(PI)
 	texture(textureMap["brick"])
 	plane(room.w, room.wallHeight) // Left wall
@@ -89,7 +89,6 @@ function loadModel_() {
 function draw() {
 	background(0)
 	stroke(0);
-
 	noStroke();
 	loadRoom()
 	loadModel_()

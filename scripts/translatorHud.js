@@ -9,16 +9,13 @@ const format = (num) => devTools().colorKey(Math.floor(num))
 document.getElementById("translator-container").innerHTML = `
 	<div class="translator">
 	<h2>Object Translator </h2>
-	<div id="xOuput">${format(window.targetObject[0])}</div>
 		<input type="range" id="objX" name="objX" min="${min}" max="${max}" value="${window.targetObject[0]}" />
-		<label for="objZ">Input X</label>
-	<div id="yOuput">${format(window.targetObject[1])}</div>
+		<label for="objZ">X <span id="xOuput">${format(window.targetObject[0])}</span> </label>
 		<input type="range" id="objY" value="${window.targetObject[1]}" name="objY" min="${min}" max="${max}" />
-		<label for="objY">Input Y</label>
+		<label for="objY">Y <span id="yOuput">${format(window.targetObject[1])}</span> </label>
 
-		<div id="zOuput">${format(window.targetObject[2])}</div>
 		<input type="range" id="objZ" name="objZ" min="${min}" max="${max}" value="${window.targetObject[2]}" />
-		<label for="objZ">Input Z</label>
+		<label for="objZ">Z &nbsp;<span id="zOuput">${format(window.targetObject[2])}</span> </label>
 </div>
 `
 
