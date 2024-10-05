@@ -11,4 +11,7 @@ const ModelModule = () => {
 		return { modelMap, textureMap }
 }
 
+	
 /* for sketch.js */ p5.prototype.registerMethod("ModelModule", ModelModule)
+
+

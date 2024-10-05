@@ -9,6 +9,8 @@ let cam1
 function preload() {
 	modelMap = ModelModule().modelMap
 	textureMap = ModelModule().textureMap
+
+
 }
 
 function setup() {
@@ -79,14 +81,18 @@ function loadRoom() {
 
 
 function loadModel_() {
+
 	if(window.targetObject){
 			push()
 			translate(window.targetObject.coordinates[0], window.targetObject.coordinates[1], window.targetObject.coordinates[2])
-			rotateX(PI/2)
+			rotateX(window.degrees_to_radians(window.targetObject.rotation[0]) )
+			rotateY( window.degrees_to_radians(window.targetObject.rotation[1]) )
+			rotateZ(window.degrees_to_radians(window.targetObject.rotation[2]) )
 			texture(textureMap[window.targetObject.texture])
 			model(modelMap[window.targetObject.id])
 			pop()
 	}
+
 }
 
 function draw() {
@@ -96,5 +102,4 @@ function draw() {
 	loadRoom()
 	loadModel_()
 	firstPerson(cam1)
-
 }
