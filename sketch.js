@@ -15,6 +15,7 @@ function setup() {
 	window.canvas = createCanvas(windowWidth, windowHeight, WEBGL)
 	cam1 = createCamera()
 
+
 }
 
 function loadRoom() {
@@ -78,12 +79,14 @@ function loadRoom() {
 
 
 function loadModel_() {
-	push()
-	translate(window.targetObject[0], window.targetObject[1], window.targetObject[2])
-	rotateX(PI/2)
-	texture(textureMap["wood"])
-	model(modelMap["desk"])
-	pop()
+	if(window.targetObject){
+			push()
+			translate(window.targetObject.coordinates[0], window.targetObject.coordinates[1], window.targetObject.coordinates[2])
+			rotateX(PI/2)
+			texture(textureMap[window.targetObject.texture])
+			model(modelMap[window.targetObject.id])
+			pop()
+	}
 }
 
 function draw() {

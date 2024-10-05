@@ -28,26 +28,33 @@ div#translator-container.translator-stats {
   display: flex;
   width: 200px;
   align-items: center;
-  color: white;
   padding: 1rem;
   flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.71);
+}
+
+.translator, #targetObjectSelect, .hud, #controls, #reload {
+color: white;
+background-color: rgba(0, 0, 0, 0.71);
 }
 
 .translator {
   width: 200px;
-  color: white;
   padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.71);
+
 }
+
+ #targetObjectSelect {
+   width: 90%;
+   margin: 1rem auto;
+   background-color: rgba(0, 0, 0, 0.71);
+   color: white;
+ }
 
 #reload {
   position: absolute;
   z-index: 1;
   top: 0;
   left:0;
-  color: white;
-  background-color: black;
 }
 
 #controls {
@@ -55,6 +62,4 @@ div#translator-container.translator-stats {
   z-index: 1;
   top: 0;
   left: 50%;
-  color: white;
-  background-color: black;
 }
