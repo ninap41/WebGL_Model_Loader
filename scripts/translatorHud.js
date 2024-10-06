@@ -14,6 +14,9 @@ document.getElementById("translator-container").innerHTML = `
 	<select id="targetObjectSelect">
 		${Object.keys(window.models).map((model) => `<option value="${model}">${model}</option>`).join("")}<br>
 	</select>
+	Scale <br>
+	<input type="range" id="objScale" name="objScale" min="-1" step=".01" max="100" value="${window.targetObject.scale}" />
+	<label for="objScale">X <span id="scaleOuput">${format(window.targetObject.scale)}</span> </label>
 	 Coordinates: <br>
 		<input type="range" id="objX" name="objX" min="${minTrans}" max="${maxTrans}" value="${window.targetObject[0]}" />
 		<label for="objZ">X <span id="xOuput">${format(window.targetObject.coordinates[0])}</span> </label>
@@ -33,7 +36,7 @@ document.getElementById("translator-container").innerHTML = `
 /* COPY model OBJ TO CLIPBOARD */
 document.getElementById("clipboard").addEventListener("click", function(e) {
 	const windowTargetId = this.getAttribute('data-value');
-	navigator.clipboard.writeText(JSON.stringify(window[windowTargetId]))
+	navigator.clipboard.writeText(JSON.parse(JSON.stringify(window[windowTargetId])))
 	alert(` <b>"${window[windowTargetId].id}"</b> object  copied to clipboard\n Paste in 'models'`)
 })
 
@@ -45,11 +48,19 @@ selectModel.addEventListener('change', (e) => {
 
 /* TARGET OBJECT MUTATION */
 const getAxisSlider = (axis) => document.getElementById(`obj${axis}`)
+
 const setOutput = (e, axis, vectorPos) => {
-	const mutationType = axis.indexOf('R') > -1 ? 'rotation' : 'coordinates'
-	window.targetObject[mutationType][vectorPos] = e.target.value
-	const output = document.getElementById(`${axis.toLowerCase()}Ouput`)
-	if (output) output.innerHTML = format(window.targetObject[mutationType][vectorPos])
+	let output = document.getElementById(`${axis.toLowerCase()}Ouput`)
+
+	if (axis === "Scale") {
+		window.targetObject["scale"] = e.target.value
+		if (output) output.innerHTML = format(window.targetObject["scale"])
+	} else {
+		const mutationType = axis.indexOf('R') > -1 ? 'rotation' : 'coordinates'
+		window.targetObject[mutationType][vectorPos] = e.target.value
+		if (output) output.innerHTML = format(window.targetObject[mutationType][vectorPos])
+	}
+
 }
 
 [{ name: 'X', pos: 0 },
@@ -58,7 +69,7 @@ const setOutput = (e, axis, vectorPos) => {
 { name: 'RX', pos: 0 },
 { name: 'RY', pos: 1 },
 { name: 'RZ', pos: 2 },
-
+{ name: 'Scale', pos: null },
 ]
 	.forEach(axis => getAxisSlider(axis.name).addEventListener('input', (e) => setOutput(e, axis.name, axis.pos)))
 

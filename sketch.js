@@ -88,6 +88,7 @@ function loadModel_() {
 			rotateX(window.degrees_to_radians(window.targetObject.rotation[0]) )
 			rotateY( window.degrees_to_radians(window.targetObject.rotation[1]) )
 			rotateZ(window.degrees_to_radians(window.targetObject.rotation[2]) )
+		  scale(window.targetObject.scale)
 			texture(textureMap[window.targetObject.texture])
 			model(modelMap[window.targetObject.id])
 			pop()
