@@ -40,6 +40,8 @@ function firstPerson(cam) {
 	
 	(mouseX / 2 + mouseX) && (mouseY / 2 + mouseY) 
 	!!this LOGIC is so IMPORTANT when activating the cursor. it offsets the position of the cursor that the center of the screen is at 0,0 vector */
+	if (window.pointerLock) {
+
 		cam.firstPersonState.azimuth -= ((mouseX / 2 + mouseX) - cam.firstPersonState.mousePrevX) / 100
 		if (abs(cam.firstPersonState.zenith + ((mouseY / 2 + mouseY) - cam.firstPersonState.mousePrevY) / 100) < PI / 2)
 			cam.firstPersonState.zenith += ((mouseY / 2 + mouseY) - cam.firstPersonState.mousePrevY) / 100
@@ -73,7 +75,6 @@ function firstPerson(cam) {
 		cam.centerZ =
 			(cam.eyeZ + cam.firstPersonState.lookAtDist * (cos(cam.firstPersonState.zenith) * sin(cam.firstPersonState.azimuth))) *lookSpeed
 
-	if (window.pointerLock) {
 
 		camera(
 			cam.eyeX, // position of person
