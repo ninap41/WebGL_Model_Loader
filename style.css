@@ -32,10 +32,14 @@ div#translator-container.translator-stats {
   flex-direction: column;
 }
 
-.translator, #targetObjectSelect, .hud, #controls, #reload {
+.translator, #targetObjectSelect,  #targetTextureSelect, .hud, #controls, #reload {
 color: white;
 background-color: rgba(0, 0, 0, 0.71);
 }
+ #targetObjectSelect, #targetTextureSelect,  {
+   width: 90%;
+   margin: 1rem auto;
+ }
 
 .translator {
   width: 200px;
@@ -43,12 +47,6 @@ background-color: rgba(0, 0, 0, 0.71);
 
 }
 
- #targetObjectSelect {
-   width: 90%;
-   margin: 1rem auto;
-   background-color: rgba(0, 0, 0, 0.71);
-   color: white;
- }
 
 #reload {
   position: absolute;

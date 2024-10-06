@@ -2,13 +2,14 @@
 const ModelModule = () => {
 	const modelMap = {}
 	const textureMap = {}
+
 	Object.keys(window.models).forEach((key) => {
 		modelMap[key] = loadModel(models[key].path, true)
 	})
 	Object.keys(window.textures).forEach((key) => {
 		textureMap[key] = loadImage(textures[key])
 	})
-		return { modelMap, textureMap }
+		return { modelMap, textureMap}
 }
 
 	

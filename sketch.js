@@ -92,14 +92,15 @@ function loadModel_() {
 			texture(textureMap[window.targetObject.texture])
 			model(modelMap[window.targetObject.id])
 			pop()
-	}
+	} 
 
 }
 
 function draw() {
 	background(0)
-	stroke(0);
 	noStroke();
+
+	
 	loadRoom()
 	loadModel_()
 	firstPerson(cam1)
