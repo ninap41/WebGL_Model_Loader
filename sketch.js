@@ -1,6 +1,4 @@
-const roamEnabled = true
 let angle = 45
-window.canvas
 let textureMap
 let modelMap
 let gameStart = true
@@ -9,26 +7,22 @@ let cam1
 function preload() {
 	modelMap = ModelModule().modelMap
 	textureMap = ModelModule().textureMap
-
-
 }
 
 function setup() {
 	window.canvas = createCanvas(windowWidth, windowHeight, WEBGL)
 	cam1 = createCamera()
-
-
 }
 
 function loadRoom() {
 	let room = {
 		w: 500,
 		h: 500,
+	
 		wallHeight: 250,
 		center: 250,
 	}
 	// Draw a floor
-
 	push()
 	translate(0, 120, 0)
 	rotateX(PI / 2)
@@ -85,9 +79,9 @@ function loadModel_() {
 	if(window.targetObject){
 			push()
 			translate(window.targetObject.coordinates[0], window.targetObject.coordinates[1], window.targetObject.coordinates[2])
-			rotateX(window.degrees_to_radians(window.targetObject.rotation[0]) )
-			rotateY( window.degrees_to_radians(window.targetObject.rotation[1]) )
-			rotateZ(window.degrees_to_radians(window.targetObject.rotation[2]) )
+			rotateX(devTools().degrees_to_radians(window.targetObject.rotation[0]) )
+			rotateY( devTools().degrees_to_radians(window.targetObject.rotation[1]) )
+			rotateZ(devTools().degrees_to_radians(window.targetObject.rotation[2]) )
 		  scale(window.targetObject.scale)
 			texture(textureMap[window.targetObject.texture])
 			model(modelMap[window.targetObject.id])
