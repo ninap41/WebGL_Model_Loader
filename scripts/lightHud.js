@@ -1,9 +1,6 @@
 /* LIGHT TRANSLATOR */
-
-const format = (num) => devTools().colorKey(num)
 // https://p5.readthedocs.io/en/latest/reference/lights.html#p5.ambient_light
 /* HUD HTML */
-
 const lightTypes = ["point", "directional", "ambient"]
 
 const renderLightTranslator = () => {

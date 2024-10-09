@@ -12,7 +12,7 @@ div#camera.hover-stats {
   top: 0;
   right: 0;
 }
-div#translator-container.translator-stats {
+div#hud-container {
   position: absolute;
   bottom: 0;
   left: 0;
