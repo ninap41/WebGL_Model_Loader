@@ -4,7 +4,7 @@ var minTrans = -1000
 var maxTrans = 1000
 var minRotat = -360
 var maxRotat = 360 // radians, step = 0.1
-const format = (num) => devTools().colorKey(Math.floor(num))
+const format = (num) => devTools().colorKey(num)
 
 /* HUD HTML */
 
@@ -57,11 +57,11 @@ const getAxisSlider = (axis) => document.getElementById(`obj${axis}`)
 const setOutput = (e, axis, vectorPos) => {
 	let output = document.getElementById(`${axis.toLowerCase()}Ouput`)
 	if (axis === "Scale") {
-		window.targetObject["scale"] = e.target.value
+		window.targetObject["scale"] = Number(e.target.value)
 		if (output) output.innerHTML = format(window.targetObject["scale"])
 	} else {
 		const mutationType = axis.indexOf('R') > -1 ? 'rotation' : 'coordinates'
-		window.targetObject[mutationType][vectorPos] = e.target.value
+		window.targetObject[mutationType][vectorPos] = Number(e.target.value)
 		if (output) output.innerHTML = format(window.targetObject[mutationType][vectorPos])
 	}
 }

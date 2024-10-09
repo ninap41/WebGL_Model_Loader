@@ -8,9 +8,9 @@ p5.prototype.registerMethod("devConfig", devConfig)
 let devTools = () => {
 	const colorKey = (val) => {
 		if (val < 0) {
-			return `<span style="color:red">${val}</span>`
+			return "<span style='color:red'>" + val + "</span>"
 		} else {
-			return `<span style="color:green">${val}</span>`
+			return "<span style='color:green'>" + val+ "</span>"
 		}
 	}
 	return { colorKey }
