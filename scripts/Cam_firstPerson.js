@@ -4,20 +4,7 @@ let movedY = 0
 let pmouseX = 0
 let pmouseY = 0
 /* to do - move center mouse https://www.geeksforgeeks.org/how-to-move-mouse-pointer-to-a-specific-position-using-javascript/ */
-function mousePressed() {
-	if (mouseIsPressed) return "I am pressed"
-	else return "not"
-}
 
-function keyPressed() {
-		if (key === 'c') {
-			if (!window.pointerLock) {
-				window.pointerLock = true
-			} else {
-				window.pointerLock = false
-			}
-	}
-}
 
 function firstPerson(cam) {
 	cam.perspective(0.5)
@@ -93,7 +80,6 @@ function firstPerson(cam) {
 	   cursor( 'crosshair', cam.firstPersonState.mousePrevX, cam.firstPersonState.mousePrevY) // Restore default cursor
 	}
 
-	if (devConfig.devMode) {
 		document.getElementById("camera").innerHTML = `
 		<div class="hud">
 		<h3>MOUSE </h3>
@@ -116,6 +102,6 @@ function firstPerson(cam) {
 		   centerZ ${devTools().colorKey(Math.floor(cam.centerZ))}<br></div> 
 			 `
 		/* camera([x], [y], [z], [centerX], [centerY], [centerZ], [upX], [upY], [upZ]) */
-	}
+	
 }
 p5.prototype.registerMethod("firstPerson", firstPerson)

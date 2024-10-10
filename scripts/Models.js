@@ -1,28 +1,29 @@
 
-window.lights = {
+window.lighting = {
 	"light1": {
-		"id": '1',
+		"id": 'light1',
 		"on": true,
 		"type": "ambient",
 		"description": "dark ambient light",
 		"color": [0, 0, 0],
+
 		// constant (float) – coefficient for the constant term
 		// linear (float) – coefficient for the linear term
 		// quadratic (float) – coefficient for the quadratic term
 		// "lightFallOff": [],
-		"lightSpecular": [],//rgb
+		// "lightSpecular": [],//rgb
 	},
 	"light2": {
-		"id": '1',
+		"id": 'light2',
 		"on": true,
 		"type": "spotlight",
 		"description": "bright white spotlight",
+		"coordinates":[0,0,0],
 		"color": [255, 255, 255],
 		// "lightFallOff": [],
-		"lightSpecular": [], //rgb
+		// "lightSpecular": [0,0,0], //rgb
 	},
 }
-window.targetLight = window.lights["desk"]
 
 window.textures = {
 	brick: "../assets/brick.avif",
@@ -49,4 +50,6 @@ window.models = {
 	}
 }
 
+
+window.targetLight = window.lighting['light2']
 window.targetObject = window.models["desk"]

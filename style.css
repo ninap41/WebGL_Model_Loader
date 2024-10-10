@@ -16,6 +16,7 @@ div#hud-container {
   position: absolute;
   bottom: 0;
   left: 0;
+  display: flex;
 }
 
 .translator-items {
@@ -32,19 +33,18 @@ div#hud-container {
   flex-direction: column;
 }
 
-.translator, #targetObjectSelect,  #targetTextureSelect, .hud, #controls, #reload {
+.translator, #light-translator, #targetObjectSelect, #targetLightSelect, #targetTextureSelect,  #targetLightType,.hud, #controls, #reload {
 color: white;
 background-color: rgba(0, 0, 0, 0.71);
 }
- #targetObjectSelect, #targetTextureSelect,  {
-   width: 90%;
+ #targetObjectSelect, #targetTextureSelect {
+   width: 100px;
    margin: 1rem auto;
  }
 
-.translator {
+.translator,#light-translator {
   width: 200px;
   padding: 1rem;
-
 }
 
 

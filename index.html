@@ -20,20 +20,20 @@
 	<button id="reload" onclick=" window.location.reload()">Reload</button>
 	<p id="controls" onclick=" window.location.reload()"><br> Press 'C' to enable W-A-S-D Controls & look around mode with
 		mouse.</p>
-	<script src="scripts/windowModels.js"></script>
+	<script src="scripts/Models.js" defer></script>
 	<div id="hud-container">
 		<div id="translator-container"></div>
 		<div id="light-translator"></div>
 	</div>
-	<script src="scripts/devTools.js"></script>
+	<script src="scripts/Tools.js" defer></script>
+	
+	<script src="scripts/HUD/Objects.js"defer></script>
+	<script src="scripts/HUD/Lights.js" defer></script>
 
-	<script src="scripts/objectHud.js"></script>
-	<script src="scripts/lightHud.js"></script>
+	<script src="scripts/ModelLoader.js" defer></script>
+	<script src="scripts/Cam_firstPerson.js"></script>
 
-	<script src="scripts/loadModels.js"></script>
-	<script src="scripts/firstPerson.js"></script>
-
-	<script src="scripts/windowEvents.js"></script>
+	<script src="scripts/Events.js"></script>
 
 	<script src="sketch.js" defer></script>
 
