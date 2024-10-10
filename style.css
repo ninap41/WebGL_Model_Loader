@@ -46,6 +46,23 @@ background-color: rgba(0, 0, 0, 0.71);
   width: 200px;
   padding: 1rem;
 }
+#p5_loading {
+  background-color: black;
+  color:white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+}
+#p5_loading  > h1{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+}
 
 
 #reload {
