@@ -27,20 +27,16 @@ const renderLightCoordinates = () => {
 	lightCoordinates.innerHTML = `
 		<div id="light-coordinates">
 		 Coordinates: <br>
-			<input type="range" id="lightX" name="lightX" min="${minTrans}" max="${maxTrans}" value="${window.targetLight.coordinates[0]}" />
-			<label for="lightZ">X <span id="xColorOuput">${format(window.targetLight.coordinates[0])}</span> </label><br>
-			
-			<input type="range" id="lightY" value="${window.targetLight.coordinates[1]}" name="lightY" min="${minTrans}" max="${maxTrans}" />
-			<label for="lightY">Y <span id="yColorOuput">${format(window.targetLight.coordinates[1])}</span> </label><br>
-			<input type="range" id="lightZ" name="lightZ" min="-1500" max="15000" value="${window.targetLight.coordinates[2]}" />
-			<label for="lightZ">Z &nbsp;<span id="zColorOuput">${format(window.targetLight.coordinates[2])}</span> </label>
+			<input type="range" id="lightX" name="lightX"  min="-1500" max="1500" value="${window.targetLight.coordinates[0]}" /><label for="lightZ">X <span id="xColorOuput">${format(window.targetLight.coordinates[0])}</span> </label><br>
+			<input type="range" id="lightY" value="${window.targetLight.coordinates[1]}" name="lightY" min="-1500" max="1500" /><label for="lightY">Y <span id="yColorOuput">${format(window.targetLight.coordinates[1])}</span> </label><br>
+			<input type="range" id="lightZ" name="lightZ" min="-1500" max="15000" value="${window.targetLight.coordinates[2]}" /><label for="lightZ">Z &nbsp;<span id="zColorOuput">${format(window.targetLight.coordinates[2])}</span> </label>
 		</div>`
 
 	const getLightAxisSlider = (axis) => document.getElementById(`light${axis}`)
 	const setLightAxisOutput = (e, axis, vectorPos) => {
 		let output = document.getElementById(`${axis.toLowerCase()}ColorOuput`)
 		window.targetLight['coordinates'][vectorPos] = Number(e.target.value)
-		if (output) output.innerHTML = format(window.targetObject['coordinates'][vectorPos])
+		if (output) output.innerHTML =  window.targetLight['coordinates'][vectorPos]
 	}
 
 	[{ name: 'X', pos: 0 },
@@ -55,11 +51,11 @@ const renderLightColor = () => {
 	const lightColor = document.getElementById('light-color')
 	lightColor.innerHTML = `
 	RGB: <br>
-			<input type="range"id="lightColorR" name="lightColorR" min="0" max="255" value="${window.targetLight.color[0]}" />
+			<input type="range"id="lightColorR" value="${window.targetLight[0]}" name="lightColorR" min="0" max="255" value="${window.targetLight.color[0]}" />
 			<label for="lightColorR"> R &nbsp;<span id="rColorOuput">${window.targetLight.color[0]}</span> </label><br>
-			<input type="range"id="lightColorG" name="lightColorG" min="0" max="255" value="${window.targetLight.color[1]}" />
+			<input type="range"id="lightColorG" value="${window.targetLight[1]}" name="lightColorG" min="0" max="255" value="${window.targetLight.color[1]}" />
 			<label for="lightColorG"> G &nbsp;<span id="gColorOuput">${window.targetLight.color[1]}</span> </label><br>
-			<input type="range"id="lightColorB" name="lightColorB" min="0" max="255" value="${window.targetLight.color[2]}" />
+			<input type="range"id="lightColorB" value="${window.targetLight[2]}" name="lightColorB" min="0" max="255" value="${window.targetLight.color[2]}" />
 			<label for="lightColorB"> B &nbsp;<span id="bColorOuput">${window.targetLight.color[2]}</span> </label><br>`
 
 	/* TARGET lightECT MUTATION */
@@ -68,7 +64,7 @@ const renderLightColor = () => {
 	const setLightColorOutput = (e, color, colorPos) => {
 		let output = document.getElementById(`${color.toLowerCase()}ColorOuput`)
 		window.targetLight['color'][colorPos] = Number(e.target.value)
-		if (output) output.innerHTML = format(window.targetLight['color'][colorPos])
+		if (output) output.innerHTML =  window.targetLight['color'][colorPos]
 	}
 
 	[{ name: 'R', pos: 0 },
@@ -76,7 +72,7 @@ const renderLightColor = () => {
 	{ name: 'B', pos: 2 }
 	].forEach(color => {
 		const slide = getLightColorSlider(color.name)
-		slide.addEventListener('input', (e) => setLightColorOutput(e, color.name, color.pos))
+	 slide.addEventListener('input', (e) => setLightColorOutput(e, color.name, color.pos))
 	})
 
 }
