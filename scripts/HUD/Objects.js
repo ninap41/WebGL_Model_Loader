@@ -8,7 +8,7 @@ const format = (num) => devTools().colorKey(num)
 
 /* HUD HTML */
 document.getElementById("translator-container").innerHTML = `
-	<div class="translator">
+	<div class="translator" >
 	<h2>Object	<i data-value="targetObject" id="clipboard" class="fa-regular fa-clipboard fa-xs" style="color: #b3ffc9;"></i></h2>
   TargetObject: &nbsp;
 	<select id="targetObjectSelect">

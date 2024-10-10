@@ -78,3 +78,7 @@ background-color: rgba(0, 0, 0, 0.71);
   top: 0;
   left: 50%;
 }
+
+.hide {
+  display:none;
+}
