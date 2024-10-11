@@ -33,7 +33,7 @@ div#hud-container {
   flex-direction: column;
 }
 
-.translator, #light-translator, #targetObjectSelect, #targetLightSelect, #targetTextureSelect,  #targetLightType,.hud, #controls, #reload {
+#object-translator, #light-translator, #targetObjectSelect, #targetLightSelect, #targetTextureSelect,  #targetLightType,.hud, #controls, #reload {
 color: white;
 background-color: rgba(0, 0, 0, 0.71);
 }
@@ -42,7 +42,7 @@ background-color: rgba(0, 0, 0, 0.71);
    margin: 1rem auto;
  }
 
-.translator,#light-translator {
+#object-translator,#light-translator {
   width: 200px;
   padding: 1rem;
 }
