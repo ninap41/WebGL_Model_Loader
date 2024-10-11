@@ -1,12 +1,13 @@
 let angle = 45
 let textureMap
-let modelMap
+let objectMap
 let gameStart = true
 let cam1
 
+
 function preload() {
-	modelMap = ModelModule().modelMap
-	textureMap = ModelModule().textureMap
+	objectMap = ModelLoader().objectMap
+	textureMap = ModelLoader().textureMap
 }
 
 function setup() {
@@ -18,7 +19,7 @@ function loadRoom() {
 	let room = {
 		w: 500,
 		h: 500,
-	
+
 		wallHeight: 250,
 		center: 250,
 	}
@@ -74,19 +75,19 @@ function loadRoom() {
 }
 
 
-function loadModel_() {
+function loadObjects() {
 
-	if(window.targetObject){
-			push()
-			translate(window.targetObject.coordinates[0], window.targetObject.coordinates[1], window.targetObject.coordinates[2])
-			rotateX(devTools().degrees_to_radians(window.targetObject.rotation[0]) )
-			rotateY( devTools().degrees_to_radians(window.targetObject.rotation[1]) )
-			rotateZ(devTools().degrees_to_radians(window.targetObject.rotation[2]) )
-		  scale(window.targetObject.scale)
-			texture(textureMap[window.targetObject.texture])
-			model(modelMap[window.targetObject.id])
-			pop()
-	} 
+	if (window.targetObject) {
+		push()
+		translate(window.targetObject.coordinates[0], window.targetObject.coordinates[1], window.targetObject.coordinates[2])
+		rotateX(devTools().degrees_to_radians(window.targetObject.rotation[0]))
+		rotateY(devTools().degrees_to_radians(window.targetObject.rotation[1]))
+		rotateZ(devTools().degrees_to_radians(window.targetObject.rotation[2]))
+		scale(window.targetObject.scale)
+		texture(textureMap[window.targetObject.texture])
+		model(objectMap[window.targetObject.id])
+		pop()
+	}
 
 }
 
@@ -94,8 +95,8 @@ function draw() {
 	background(0)
 	noStroke();
 
-	
+
 	loadRoom()
-	loadModel_()
+	loadObjects()
 	firstPerson(cam1)
 }

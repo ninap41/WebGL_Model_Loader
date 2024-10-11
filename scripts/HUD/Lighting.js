@@ -1,121 +1,117 @@
 /* LIGHT TRANSLATOR */
 // https://p5.readthedocs.io/en/latest/reference/lights.html#p5.ambient_light
 /* HUD HTML */
+// import HudGenerator from "./HudGenerator.js"	
+// var { addClipboard } = HudGenerator("Lighting")
 const lightTypes = ["point", "directional", "ambient"]
-document.getElementById("light-translator").innerHTML = `
-<h2>Light	<i data-value2="targetLight" id="clipboard2" class="fa-regular fa-clipboard fa-xs" style="color: #b3ffc9;"></i></h2>
+
+document.getElementById(`Lighting-translator`).innerHTML = `
+<h2>Light	<i data-value="targetLighting" id="clipboard-Lighting" class="fa-regular fa-clipboard fa-xs" style="color: #b3ffc9;"></i></h2>
 
 Target Light: &nbsp;
-<select id="targetLightSelect">
-	${Object.keys(window.lighting).map((light) => `<option value="${light}" ${window.targetLight.id === light ? `selected="${light}"` : ``}>${light}</option>`).join("")}<br>
+<select id="targetLightingSelect">
+	${Object.keys(window.lighting).map((light) => `<option value="${light}" ${window.targetLighting.id === light ? `selected="${light}"` : ``}>${light}</option>`).join("")}<br>
 </select><br>
 
 Target Light Type: &nbsp;
-<select id="targetLightType">
+<select id="targetLightingType">
 	${lightTypes.map((lightType) => `<option value="${lightType}" 
-	${window.targetLight.type === lightType ? `selected="${lightType}"` : ``}>${lightType}</option>`).join("")}<br>
+	${window.targetLighting.type === lightType ? `selected="${lightType}"` : ``}>${lightType}</option>`).join("")}<br>
 </select>
-<div id="light-color"></div>
-<div id="light-coordinates"></div>
+<div id="Lighting-color"></div>
+<div id="Lighting-coordinates"></div>
 
 ` + "<p> To do, color change on axises, add texture, add falloff, update Sketchjs for target Object.  And Toggling on other objects that are not target objects.</p>"
 
 
 /* ______________________________ */
-const renderLightCoordinates = () => {
-	const lightCoordinates = document.getElementById("light-coordinates")
+const renderLightingCoordinates = () => {
+	const lightCoordinates = document.getElementById("Lighting-coordinates")
 	lightCoordinates.innerHTML = `
-		<div id="light-coordinates">
+		<div id="Lighting-coordinates">
 		 Coordinates: <br>
-			<input type="range" id="lightX" name="lightX"  min="-1500" max="1500" value="${window.targetLight.coordinates[0]}" /><label for="lightZ">X <span id="xColorOuput">${format(window.targetLight.coordinates[0])}</span> </label><br>
-			<input type="range" id="lightY" value="${window.targetLight.coordinates[1]}" name="lightY" min="-1500" max="1500" /><label for="lightY">Y <span id="yColorOuput">${format(window.targetLight.coordinates[1])}</span> </label><br>
-			<input type="range" id="lightZ" name="lightZ" min="-1500" max="15000" value="${window.targetLight.coordinates[2]}" /><label for="lightZ">Z &nbsp;<span id="zColorOuput">${format(window.targetLight.coordinates[2])}</span> </label>
+			<input type="range" id="Lighting-X" name="Lighting-X"  min="-1500" max="1500" value="${window.targetLighting.coordinates[0]}" /><label for="Lighting-X">X <span id="x-Lighting-Ouput">${format(window.targetLighting.coordinates[0])}</span> </label><br>
+			<input type="range" id="Lighting-Y" value="${window.targetLighting.coordinates[1]}" name="Lighting-Y" min="-1500" max="1500" /><label for="Lighting-Y">Y <span id="y-Lighting-Ouput">${format(window.targetLighting.coordinates[1])}</span> </label><br>
+			<input type="range" id="Lighting-Z" name="lightZ" min="-1500" max="15000" value="${window.targetLighting.coordinates[2]}" /><label for="Lighting-Z">Z &nbsp;<span id="z-Lighting-Output">${format(window.targetLighting.coordinates[2])}</span> </label>
 		</div>`
 
-	const getLightAxisSlider = (axis) => document.getElementById(`light${axis}`)
-	const setLightAxisOutput = (e, axis, vectorPos) => {
-		let output = document.getElementById(`${axis.toLowerCase()}ColorOuput`)
-		window.targetLight['coordinates'][vectorPos] = Number(e.target.value)
-		if (output) output.innerHTML =  window.targetLight['coordinates'][vectorPos]
+	const getLightingAxisSlider = (axis) => document.getElementById(`Lighting-${axis}`)
+	const setLightingAxisOutput = (e, axis, vectorPos) => {
+		let output = document.getElementById(`${axis.toLowerCase()}-Lighting-Ouput`)
+		window.targetLighting['coordinates'][vectorPos] = Number(e.target.value)
+		if (output) output.innerHTML = window.targetLighting['coordinates'][vectorPos]
 	}
 
-	[{ name: 'X', pos: 0 },
-	{ name: 'Y', pos: 1 },
-	{ name: 'Z', pos: 2 }].forEach(axis => {
-		var slide = getLightAxisSlider(axis.name)
-		slide.addEventListener('input', (e) => setLightAxisOutput(e, axis.name, axis.pos))
-	})
+	['X',
+		'Y',
+		'Z'].forEach((axis, idx) => {
+			var slide = getLightingAxisSlider(axis)
+			slide.addEventListener('input', (e) => setLightingAxisOutput(e, axis, idx))
+		})
 }
 
-const renderLightColor = () => {
-	const lightColor = document.getElementById('light-color')
+const renderLightingColor = () => {
+	const lightColor = document.getElementById('Lighting-color')
 	lightColor.innerHTML = `
 	RGB: <br>
-			<input type="range"id="lightColorR" value="${window.targetLight[0]}" name="lightColorR" min="0" max="255" value="${window.targetLight.color[0]}" />
-			<label for="lightColorR"> R &nbsp;<span id="rColorOuput">${window.targetLight.color[0]}</span> </label><br>
-			<input type="range"id="lightColorG" value="${window.targetLight[1]}" name="lightColorG" min="0" max="255" value="${window.targetLight.color[1]}" />
-			<label for="lightColorG"> G &nbsp;<span id="gColorOuput">${window.targetLight.color[1]}</span> </label><br>
-			<input type="range"id="lightColorB" value="${window.targetLight[2]}" name="lightColorB" min="0" max="255" value="${window.targetLight.color[2]}" />
-			<label for="lightColorB"> B &nbsp;<span id="bColorOuput">${window.targetLight.color[2]}</span> </label><br>`
+			<input type="range"id="Lighting-Color-R" value="${window.targetLighting[0]}" name="Lighting-Color-R" min="0" max="255" value="${window.targetLighting.color[0]}" />
+			<label for="Lighting-Color-R"> R &nbsp;<span id="r-Color-Ouput">${window.targetLighting.color[0]}</span> </label><br>
+			<input type="range"id="Lighting-Color-G" value="${window.targetLighting[1]}" name="Lighting-Color-G" min="0" max="255" value="${window.targetLighting.color[1]}" />
+			<label for="Lighting-Color-G"> G &nbsp;<span id="g-Color-Ouput">${window.targetLighting.color[1]}</span> </label><br>
+			<input type="range"id="Lighting-Color-B" value="${window.targetLighting[2]}" name="Lighting-Color-B" min="0" max="255" value="${window.targetLighting.color[2]}" />
+			<label for="Lighting-Color-B"> B &nbsp;<span id="b-Color-Ouput">${window.targetLighting.color[2]}</span> </label><br>`
 
 	/* TARGET lightECT MUTATION */
-	const getLightColorSlider = (color) => document.getElementById(`lightColor${color}`)
+	const getLightingColorSlider = (color) => document.getElementById(`Lighting-Color-${color}`)
 
-	const setLightColorOutput = (e, color, colorPos) => {
-		let output = document.getElementById(`${color.toLowerCase()}ColorOuput`)
-		window.targetLight['color'][colorPos] = Number(e.target.value)
-		if (output) output.innerHTML =  window.targetLight['color'][colorPos]
+	const setLightingColorOutput = (e, key, idx) => {
+		let output = document.getElementById(`${key.toLowerCase()}-Color-Ouput`)
+		window.targetLighting[key][idx] = Number(e.target.value)
+		if (output) output.innerHTML = window.targetLighting[key][idx]
 	}
 
-	[{ name: 'R', pos: 0 },
-	{ name: 'G', pos: 1 },
-	{ name: 'B', pos: 2 }
-	].forEach(color => {
-		const slide = getLightColorSlider(color.name)
-	 slide.addEventListener('input', (e) => setLightColorOutput(e, color.name, color.pos))
+	["R", "G", "B"].forEach((color, idx) => {
+		getLightingColorSlider(color).addEventListener('input', (e) => setLightingColorOutput(e, color, idx))
 	})
-
 }
-
-
 
 
 /* COPY model light TO CLIPBOARD */
-document.getElementById("clipboard2").addEventListener("click", function(e) {
-	const windowTargetId = this.getAttribute('data-value2');
+document.getElementById("clipboard-Lighting").addEventListener("click", function(e) {
+	const windowTargetId = this.getAttribute('data-value');
 	navigator.clipboard.writeText(JSON.stringify(window[windowTargetId]))
-	alert(` <b>"${window[windowTargetId].id}"</b> light instance  copied to clipboard\n Paste in 'lights'`)
+	alert(` <b>"${window[windowTargetId].id}"</b> Lighting instance  copied to clipboard\n Paste in 'lights'`)
 })
+// window.addClipboard("Lighting")
 
-const selectType = document.getElementById("targetLightType")
+const selectType = document.getElementById("targetLightingType")
 selectType.addEventListener('change', (e) => {
-	window.targetLight.type = selectType.value
+	window.targetLighting.type = selectType.value
 	render()
 })
 
-const selectLight = document.getElementById("targetLightSelect")
-selectLight.addEventListener('change', (e) => {
-	console.log("SelectLightChange")
-	window.targetLight = window.lighting[selectLight.value];
-	selectType.value = window.targetLight.type
+const selectLighting = document.getElementById("targetLightingSelect")
+selectLighting.addEventListener('change', (e) => {
+	window.targetLighting = window.lighting[selectLighting.value];
+	selectType.value = window.targetLighting.type
 	render()
 })
 
 
 
 const clear = () => {
-	document.getElementById("light-color").innerHTML = ``
-	document.getElementById("light-coordinates").innerHTML = ``
+	document.getElementById("Lighting-color").innerHTML = ``
+	document.getElementById("Lighting-coordinates").innerHTML = ``
 }
 
 function render() {
 	clear()
-	if (window.targetLight.type === "ambient") {
-		renderLightColor()
+	if (window.targetLighting.type === "ambient") {
+		renderLightingColor()
 	} else {
-		renderLightColor()
-		if (window.targetLight.hasOwnProperty("coordinates")) {
-			renderLightCoordinates()
+		renderLightingColor()
+		if (window.targetLighting.hasOwnProperty("coordinates")) {
+			renderLightingCoordinates()
 		}
 	}
 }

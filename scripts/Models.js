@@ -31,7 +31,7 @@ window.textures = {
 	plant: "../assets/plant_texture.jpg",
 }
 
-window.models = {
+window.objects = {
 	desk: {
 		"id": "desk",
 		"path": "./assets/desk_tinker.obj",
@@ -51,5 +51,5 @@ window.models = {
 }
 
 
-window.targetLight = window.lighting['light2']
-window.targetObject = window.models["desk"]
+window.targetLighting = window.lighting['light2']
+window.targetObject = window.objects["desk"]

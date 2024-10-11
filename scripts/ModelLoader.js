@@ -1,18 +1,17 @@
 
-const ModelModule = () => {
-	const modelMap = {}
+const ModelLoader = () => {
+	const objectMap = {}
 	const textureMap = {}
 
-	Object.keys(window.models).forEach((key) => {
-		modelMap[key] = loadModel(models[key].path, true)
+	Object.keys(window.objects).forEach((key) => {
+		objectMap[key] = loadModel(window.objects[key].path, true)
 	})
 	Object.keys(window.textures).forEach((key) => {
-		textureMap[key] = loadImage(textures[key])
+		textureMap[key] = loadImage(window.textures[key])
 	})
-		return { modelMap, textureMap}
+	return { objectMap, textureMap }
 }
 
-	
-/* for sketch.js */ p5.prototype.registerMethod("ModelModule", ModelModule)
+/* for sketch.js */ p5.prototype.registerMethod("ModelLoader", ModelLoader)
 
 
