@@ -54,24 +54,27 @@ const renderLightingColor = () => {
 	const lightColor = document.getElementById('Lighting-color')
 	lightColor.innerHTML = `
 	RGB: <br>
-			<input type="range"id="Lighting-Color-R" value="${window.targetLighting[0]}" name="Lighting-Color-R" min="0" max="255" value="${window.targetLighting.color[0]}" />
-			<label for="Lighting-Color-R"> R &nbsp;<span id="r-Color-Ouput">${window.targetLighting.color[0]}</span> </label><br>
-			<input type="range"id="Lighting-Color-G" value="${window.targetLighting[1]}" name="Lighting-Color-G" min="0" max="255" value="${window.targetLighting.color[1]}" />
-			<label for="Lighting-Color-G"> G &nbsp;<span id="g-Color-Ouput">${window.targetLighting.color[1]}</span> </label><br>
-			<input type="range"id="Lighting-Color-B" value="${window.targetLighting[2]}" name="Lighting-Color-B" min="0" max="255" value="${window.targetLighting.color[2]}" />
-			<label for="Lighting-Color-B"> B &nbsp;<span id="b-Color-Ouput">${window.targetLighting.color[2]}</span> </label><br>`
+			<input type="range"id="Lighting-Color-R" value="${window.targetLighting.color[0]}" name="Lighting-Color-R" min="0" max="255" value="${window.targetLighting.color[0]}" />
+			<label for="Lighting-Color-R"> R &nbsp;<span id="r-Color-Ouput">${format(window.targetLighting.color[0])}</span> </label><br>
+			
+			<input type="range"id="Lighting-Color-G" value="${window.targetLighting.color[1]}" name="Lighting-Color-G" min="0" max="255" value="${window.targetLighting.color[1]}" />
+			<label for="Lighting-Color-G"> G &nbsp;<span id="g-Color-Ouput">${format(window.targetLighting.color[1])}</span> </label><br>
+			
+			<input type="range"id="Lighting-Color-B" name="Lighting-Color-B" min="0" max="255" value="${window.targetLighting.color[2]}" />
+			<label for="Lighting-Color-B"> B &nbsp;<span id="b-Color-Ouput">${format(window.targetLighting.color[2])}</span> </label><br>`
 
 	/* TARGET lightECT MUTATION */
 	const getLightingColorSlider = (color) => document.getElementById(`Lighting-Color-${color}`)
-
 	const setLightingColorOutput = (e, key, idx) => {
 		let output = document.getElementById(`${key.toLowerCase()}-Color-Ouput`)
-		window.targetLighting[key][idx] = Number(e.target.value)
-		if (output) output.innerHTML = window.targetLighting[key][idx]
+		console.log(e.target.value)
+		window.targetLighting['color'][idx] = Number(e.target.value)
+		if (output) output.innerHTML = window.targetLighting['color'][idx]
 	}
 
 	["R", "G", "B"].forEach((color, idx) => {
-		getLightingColorSlider(color).addEventListener('input', (e) => setLightingColorOutput(e, color, idx))
+		const slide = getLightingColorSlider(color)
+			slide.addEventListener('input', (e) => setLightingColorOutput(e, color, idx))
 	})
 }
 
