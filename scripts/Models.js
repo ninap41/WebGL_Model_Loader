@@ -51,5 +51,9 @@ window.objects = {
 }
 
 
-window.targetLighting = window.lighting['light2']
-window.targetObject = window.objects["desk"]
+window.targetlighting = window.lighting['light2']
+
+// window.targetObject = window.objects["desk"]
+// window.targetlighting = window.lighting['light2']
+
+window.targetobjects = window.objects["desk"]

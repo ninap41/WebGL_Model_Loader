@@ -33,7 +33,7 @@ div#hud-container {
   flex-direction: column;
 }
 
-#Object-translator, #Lighting-translator, #targetObjectSelect, #targetLightSelect, #targetTextureSelect,  #targetLightType,.hud, #controls, #reload {
+#objects-translator, #lighting-translator, #targetObjectSelect, #targetLightSelect, #targetTextureSelect,  #targetLightType,.hud, #controls, #reload {
 color: white;
 background-color: rgba(0, 0, 0, 0.71);
 }
@@ -42,7 +42,7 @@ background-color: rgba(0, 0, 0, 0.71);
    margin: 1rem auto;
  }
 
-#Object-translator,#Lighting-translator {
+#objects-translator,#lighting-translator {
   width: 200px;
   padding: 1rem;
 }
@@ -81,4 +81,8 @@ background-color: rgba(0, 0, 0, 0.71);
 
 .hide {
   display:none;
+}
+
+.hide {
+  display: none;
 }
