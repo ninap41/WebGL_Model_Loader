@@ -194,12 +194,10 @@ class HudFactory {
 
 	addInputGroupListeners = (propertyKey) => {
 		const { inputIds, outputIds } = this.sliderGroupIds[propertyKey].values
-		inputIds.forEach((inputId, idx) => addListener(inputId, "change", (e) => {
+		inputIds.forEach((inputId, idx) => addListener(inputId, "input", (e) => {
 			console.log(e.target.value, "inputGROUPListener")
 			window[`target${this.key}`][propertyKey][idx] = e.target.value
-			// getInput(outputIds[idx]).innerHTML = format(e.target.value)
-			this.updateDOM()
-
+			getInput(outputIds[idx]).innerHTML = format(e.target.value)
 		}))
 
 	}
@@ -208,9 +206,7 @@ class HudFactory {
 		const { outputId } = this.sliderGroupIds[propertyKey].value
 		addListener(`${this.key}-${propertyKey}-input`, "input", (e) => {
 			window[`target${this.key}`][propertyKey] = e.target.value
-	   	// getInput(outputId).innerHTML = format(e.target.value)
-			this.updateDOM()
-
+	   	getInput(outputId).innerHTML = format(e.target.value)
 		})
 	}
 
@@ -223,7 +219,6 @@ class HudFactory {
 		addListener(`clipboard-${this.key}`, "click", (e) => { // clipboard
 			navigator.clipboard.writeText(JSON.stringify(window[this.targetSourceId]))
 			alert(` <b>"${window[this.targetSourceId].id}"</b> Lighting instance  copied to clipboard\n Paste in 'lights'`)
-			
 		})
 		
 		if (this.key === "lighting") {
@@ -253,7 +248,7 @@ class HudFactory {
 window.lightingHUD = new HudFactory().build("lighting", window.targetLighting, ['coordinates', 'color', "type"])
 window.objectsHUD = new HudFactory().build("objects", window.targetObjects, ['coordinates', 'scale', 'rotation', 'texture', 'type'])
 window.lightingHUD.render()
-window.lightingHUD.addEventListeners()
+	window.lightingHUD.addEventListeners()
 window.objectsHUD.render()
-window.objectsHUD.addEventListeners()
+	window.objectsHUD.addEventListeners()
 
