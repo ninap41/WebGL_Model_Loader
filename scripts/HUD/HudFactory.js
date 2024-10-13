@@ -17,14 +17,14 @@ class HudFactory {
 			inputType: "range",
 			label: "Coordinates",
 			group: true,
-			inputKeyMap: ["X", "Y", "Z"],
+			inputs: ["X", "Y", "Z"],
 			minMax: [-1500, 1500],
 		},
 		color: {
 			inputType: "range",
 			label: "Color",
 			group: true,
-			inputKeyMap: ["R", "G", "B"],
+			inputs: ["R", "G", "B"],
 			label: "Color",
 			minMax: [0, 255],
 
@@ -33,7 +33,7 @@ class HudFactory {
 			inputType: "range",
 			label: "Rotation",
 			group: true,
-			inputKeyMap: ["RX", "RY", "RZ"],
+			inputs: ["RX", "RY", "RZ"],
 			minMax: [-360, 360],
 
 
@@ -82,11 +82,11 @@ class HudFactory {
 		properties	/* propertyId ->  coordinates, color, rotation, scale, texture, type propertyAxis -> X, Y, Z, R, G, B, RX, RY, RZ, Scale */
 			.forEach((propertyId) => {
 				if (this.HUDProps[propertyId].group) {// GROUP input
-					const generateGroupIds = (type) => this.HUDProps[propertyId].inputKeyMap.map((propertyAxis) => `${this.key}-${propertyAxis}-${type}`)
+					const generateGroupIds = (type) => this.HUDProps[propertyId].inputs.map((propertyAxis) => `${this.key}-${propertyAxis}-${type}`)
 					group[propertyId] = { // group props include rotation, color, coordinates
 						values: {
 							group: this.HUDProps[propertyId].group,
-							inputKeyMap: this.HUDProps[propertyId].inputKeyMap,
+							inputs: this.HUDProps[propertyId].inputs,
 							label: this.HUDProps[propertyId].label,
 							minMax: this.HUDProps[propertyId].minMax,
 							inputType: this.HUDProps[propertyId].inputType,
@@ -128,7 +128,8 @@ class HudFactory {
 	renderScale = () => {
 		const { label, inputId, outputId, inputType, minMax } = this.sliderGroupIds.scale.value
 		return `${label}: &nbsp;
-	<input type="${inputType}" id="${inputId}" ${inputType === 'range' ? `step=".1"` : ''} value="${window[`${this.targetSourceId}`].scale}" name="${inputId}"  min="${minMax[0]}" max="${minMax[1]}"  />`
+	<input type="${inputType}" id="${inputId}" ${inputType === 'range' ? `step=".1"` : ''} value="${window[`${this.targetSourceId}`].scale}" name="${inputId}"  min="${minMax[0]}" max="${minMax[1]}"  />
+	<label for="${inputId}">  ${window[`${this.targetSourceId}`].scale} <span id="${outputId}">${format(window[`${this.targetSourceId}`].scale)} </span> </label>`
 	}
 
 	renderSelectTargetDropdown = () => {// [ 'light1', light2'] 
@@ -144,9 +145,9 @@ class HudFactory {
 		const { label, inputIds } = this.sliderGroupIds[groupId].values
 		let html = `<br> ${label}:<br>`
 		html += inputIds.map((targetId, idx) => {
-			const { outputIds, inputKeyMap, inputType, minMax } = this.sliderGroupIds[groupId].values
-			return `<input type="${inputType}"id="${targetId}"  value="${window[`${this.targetSourceId}`][groupId][idx]}" name="${targetId}"  min="${minMax[0]}" max="${minMax[1]}" ${inputType === 'range' ? `step=".01"` : ''} value="${window[`${this.targetSourceId}`][groupId][idx]}" />
-				<label for="${targetId}">  ${inputKeyMap[idx]} <span id="${outputIds[idx]}">${format(window[`${this.targetSourceId}`][groupId][idx])} </span> </label><br>`
+			const { outputIds, inputs, inputType, minMax } = this.sliderGroupIds[groupId].values
+			return `<input type="${inputType}"id="${targetId}"  value="${window[`${this.targetSourceId}`][groupId][idx]}" name="${targetId}"  min="${minMax[0]}" max="${minMax[1]}" ${inputType === 'range' ? `step=".1"` : ''} value="${window[`${this.targetSourceId}`][groupId][idx]}" />
+				<label for="${targetId}">  ${inputs[idx]} <span id="${outputIds[idx]}">${format(window[`${this.targetSourceId}`][groupId][idx])} </span> </label><br>`
 		}).join('')
 		return html
 	}
@@ -192,19 +193,24 @@ class HudFactory {
 	}
 
 	addInputGroupListeners = (propertyKey) => {
-		const { inputIds } = this.sliderGroupIds[propertyKey].values
+		const { inputIds, outputIds } = this.sliderGroupIds[propertyKey].values
 		inputIds.forEach((inputId, idx) => addListener(inputId, "change", (e) => {
 			console.log(e.target.value, "inputGROUPListener")
 			window[`target${this.key}`][propertyKey][idx] = e.target.value
+			// getInput(outputIds[idx]).innerHTML = format(e.target.value)
 			this.updateDOM()
+
 		}))
 
 	}
 
 	addInputListener = (propertyKey) => {
-		addListener(`${this.key}-${propertyKey}-input`, "change", (e) => {
+		const { outputId } = this.sliderGroupIds[propertyKey].value
+		addListener(`${this.key}-${propertyKey}-input`, "input", (e) => {
 			window[`target${this.key}`][propertyKey] = e.target.value
+	   	// getInput(outputId).innerHTML = format(e.target.value)
 			this.updateDOM()
+
 		})
 	}
 
@@ -217,6 +223,7 @@ class HudFactory {
 		addListener(`clipboard-${this.key}`, "click", (e) => { // clipboard
 			navigator.clipboard.writeText(JSON.stringify(window[this.targetSourceId]))
 			alert(` <b>"${window[this.targetSourceId].id}"</b> Lighting instance  copied to clipboard\n Paste in 'lights'`)
+			
 		})
 		
 		if (this.key === "lighting") {
@@ -245,6 +252,8 @@ class HudFactory {
 
 window.lightingHUD = new HudFactory().build("lighting", window.targetLighting, ['coordinates', 'color', "type"])
 window.objectsHUD = new HudFactory().build("objects", window.targetObjects, ['coordinates', 'scale', 'rotation', 'texture', 'type'])
-window.lightingHUD.render().then(() => window.lightingHUD.addEventListeners())
-window.objectsHUD.render().then(() => window.objectsHUD.addEventListeners())
+window.lightingHUD.render()
+window.lightingHUD.addEventListeners()
+window.objectsHUD.render()
+window.objectsHUD.addEventListeners()
 
