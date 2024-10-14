@@ -2,6 +2,7 @@
 
 const { format, capitalize, getInput, hasClass, setOutput, addListener } = window.DOMUtils
 
+
 class HudFactory {
 	key = "name"	// lighting, objects, camera, lighting, camera
 	template = ''
@@ -11,7 +12,7 @@ class HudFactory {
 	targetSourceId = null
 	inputGroupIds = null
 	lightingTypes = ["point", "directional", "ambient"]
-  /*
+	/*
 	going to use this to simplify renders
 	HUDS = {
 		"lighting": {
@@ -64,7 +65,6 @@ class HudFactory {
 			label: "Color",
 			group: true,
 			inputs: ["R", "G", "B"],
-			label: "Color",
 			minMax: [0, 255],
 
 		},
@@ -72,10 +72,9 @@ class HudFactory {
 			inputType: "range",
 			label: "Rotation",
 			group: true,
+
 			inputs: ["RX", "RY", "RZ"],
 			minMax: [-360, 360],
-
-
 		},
 		scale: {
 			inputType: "range",
@@ -98,7 +97,7 @@ class HudFactory {
 		},
 		type: {
 			inputType: "select",
-			label: "Scale",
+			label: "Light Type",
 			group: false,
 			value: "type",
 		},
@@ -111,13 +110,12 @@ class HudFactory {
 		this.targetSource = targetSource
 		this.key = key
 		this.wrapperId = `${key}-translator`
-		this.maxProperties = maxProperties; //for ambient lighting which limits display: ['coordinates', 'color']
+		this.maxProperties = maxProperties; //for ambient lighting  
 		this.targetSourceId = `target${key}` // onwindow
 		this.inputGroupIds = this.getInputIds(maxProperties)
 		this.template = ''
 		return this
 	}
-
 
 	getInputIds(properties) {
 		var group = {}
@@ -126,7 +124,7 @@ class HudFactory {
 				if (this.HUDProps[propertyId].group) {// GROUP input
 					const generateGroupIds = (type) => this.HUDProps[propertyId].inputs.map((propertyAxis) => `${this.key}-${propertyAxis}-${type}`)
 					group[propertyId] = { // group props include rotation, color, coordinates
-						values: {
+						value: {
 							group: this.HUDProps[propertyId].group,
 							inputs: this.HUDProps[propertyId].inputs,
 							label: this.HUDProps[propertyId].label,
@@ -150,15 +148,10 @@ class HudFactory {
 						},
 						inputType: this.HUDProps[propertyId].inputType
 					}
-					if(group[propertyId].value.label ==="Texture")		console.log(group)
-
 				}
-
 			})
-
 		return group
 	}
-
 
 	renderType = () => {
 		const { inputId, label, } = this.inputGroupIds.type.value
@@ -170,7 +163,7 @@ class HudFactory {
 		 </select>`
 	}
 
-	renderInput =(propertyId) => {
+	renderInput = (propertyId, callback) => {
 		const { label, inputId, outputId, inputType, minMax } = this.inputGroupIds[propertyId].value
 		return `
 		${label}: &nbsp;
@@ -183,7 +176,6 @@ class HudFactory {
 			name="${inputId}"  
 			${minMax ? ` min="${minMax[0]}" max="${minMax[1]}"` : ''}  />
 		  <label for="${inputId}">  
-						${window[`${this.targetSourceId}`][propertyId]} 
 					<span id="${outputId}">
 						${format(window[`${this.targetSourceId}`][propertyId])}
 					</span> 	
@@ -192,7 +184,7 @@ class HudFactory {
 
 
 
-	renderSelectTargetDropdown = ( ) => {// choose --> [ 'light1', light2'] 
+	renderSelectTargetDropdown = () => {// choose --> [ 'light1', light2'] 
 		const keyArrayOfAllOptions = Object.keys(window[`${this.key}`])
 		return `Target: &nbsp;
 			<select id="target-${this.key}-select">
@@ -205,7 +197,7 @@ class HudFactory {
 
 
 	renderInputGroup = (groupId) => { // [ X Y Z]  [R G B] [RX RY RZ]
-		const { label, inputIds,  outputIds, inputs, inputType, minMax } = this.inputGroupIds[groupId].values
+		const { label, inputIds, outputIds, inputs, inputType, minMax } = this.inputGroupIds[groupId].value
 		let html = `<br> ${label}:<br>`
 		html += inputIds.map((targetId, idx) => {
 			return `
@@ -229,21 +221,18 @@ class HudFactory {
 	}
 
 	renderSelect = (propertyId, options) => {// choose --> [ 'light1', light2'] 
-		console.log(propertyId)
-		console.log(this.inputGroupIds)
-		const { label, inputId, outputId  } = this.inputGroupIds[propertyId].value
-		const keyArrayOfAllOptions = Object.keys(options)
-	
+		const { label, inputId } = this.inputGroupIds[propertyId].value
+		const allOptions = Array.isArray(options) ? options : Object.keys(options)
 		return `${capitalize(label)} &nbsp;
 			<select id="${inputId}">
-					${keyArrayOfAllOptions.map((option) => {
-						console.log( `${window[`${this.targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}`)
-							return`
+					${allOptions.map((option) => {
+			console.log(`${window[`${this.targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}`)
+			return `
 						<option 
 						${window[`${this.targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}>	
 							${option}
 						</option>`
-																		 })}
+		})}
 			</select><br>`
 	}
 
@@ -270,13 +259,13 @@ class HudFactory {
 			const type = window[`${this.targetSourceId}`].type
 			if (type === "ambient") {
 				this.template +=
-					this.renderType() +
+					this.renderSelect('type', ['ambient', 'point', 'directional']) +
 					this.renderInputGroup("color") +
 					`<div id="` + this.key + `-color"></div>` +
 					`<div id=` + this.key + `-coordinates"></div>`
 			} else {
 				this.template +=
-					this.renderType() +
+					this.renderSelect('type', ['ambient', 'point', 'directional']) +
 					this.renderInputGroup("coordinates") +
 					`<div id="` + this.key + `-color"></div>` +
 					` <div id=` + this.key + `-coordinates"></div>`
@@ -295,7 +284,7 @@ class HudFactory {
 	}
 
 	addInputGroupListeners = (propertyKey) => {
-		const { inputIds, outputIds } = this.inputGroupIds[propertyKey].values
+		const { inputIds, outputIds } = this.inputGroupIds[propertyKey].value
 		inputIds.forEach((inputId, idx) => addListener(inputId, "input", (e) => {
 			window[`target${this.key}`][propertyKey][idx] = e.target.value
 			getInput(outputIds[idx]).innerHTML = format(e.target.value)
@@ -305,11 +294,9 @@ class HudFactory {
 
 	addInputListener = (propertyKey) => {
 		const { outputId, inputType } = this.inputGroupIds[propertyKey].value
-		
 		addListener(`${this.key}-${propertyKey}-input`, "input", (e) => {
-			console.log(" asdasd", e.target.value)
 			window[`target${this.key}`][propertyKey] = e.target.value
-			if(outputId && getInput(outputId)) getInput(outputId).innerHTML = format(e.target.value)
+			if (outputId && getInput(outputId)) getInput(outputId).innerHTML = format(e.target.value)
 
 		})
 	}
@@ -325,9 +312,13 @@ class HudFactory {
 			alert(` <b>"${window[this.targetSourceId].id}"</b> Lighting instance  copied to clipboard\n Paste in 'lights'`)
 		})
 
+		addListener(`toolbar-${this.key}`, "click", (e) => this.toggleShow())
+
 		if (this.key === "lighting") {
+
 			this.addInputListener("type")
 			if (window[`target${this.key}`].type !== "ambient") {
+				console.log("ambient listener added")
 				this.addInputGroupListeners("color")
 			} else {
 				this.addInputGroupListeners("coordinates")
@@ -343,7 +334,11 @@ class HudFactory {
 		}
 	}
 
-	toggleShow() { this.hudElement.classList.contains("hide") ? this.hudElement.classList.remove("hide") : this.hudElement.classList.add("hide") }
+	toggleShow() {
+		const translatorWrapper = document.getElementById(this.wrapperId)
+		translatorWrapper.classList.contains("hide")
+			? translatorWrapper.classList.remove("hide") : translatorWrapper.classList.add("hide")
+	}
 
 	updateDOM() {
 		this.render()

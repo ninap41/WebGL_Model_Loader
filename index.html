@@ -14,10 +14,14 @@
 <body>
 	<script>
 		window.pointerLock = false
-
 	</script>
-	<div id="camera" class="hover-stats"></div>
-	<button id="reload" onclick=" window.location.reload()">Reload</button>
+	<div id="toolbar">
+		<button id="toolbar-lighting">Lighting</button>
+			<button id="toolbar-objects">Objects</button>
+		<button id="reload" onclick=" window.location.reload()">Reload</button>
+
+	</div>
+	<div id="camera-translator" class="hover-stats"></div>
 	<p id="controls" onclick=" window.location.reload()"><br> Press 'C' to enable W-A-S-D Controls & look around mode with
 		mouse.</p>
 	<script src="scripts/Models.js" defer></script>
@@ -25,9 +29,9 @@
 		<div id="objects-translator"></div>
 		<div id="lighting-translator"></div>
 	</div>
-	<script src="scripts/Tools.js" defer></script>
+	<script src="scripts/DevTools.js" defer></script>
 	<script src="scripts/DOMUtils.js" defer></script>
-	<script  type="module" src="scripts/HUD/HudFactory.js" defer></script>
+	<script  type="module" src="scripts/HUD/HudController.js" defer></script>
 	<script src="scripts/ModelLoader.js" defer></script>
 	<script src="scripts/Cam_firstPerson.js"></script>
 

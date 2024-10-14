@@ -7,7 +7,7 @@ canvas {
 }
 
 
-div#camera.hover-stats {
+div#camera-translator.hover-stats {
   position: absolute;
   top: 0;
   right: 0;
@@ -33,7 +33,7 @@ div#hud-container {
   flex-direction: column;
 }
 
-#objects-translator, #lighting-translator, #targetObjectSelect, #targetLightSelect, #targetTextureSelect,  #targetLightType,.hud, #controls, #reload {
+#objects-translator, #lighting-translator, #targetObjectSelect, #targetLightSelect, #targetTextureSelect,  #targetLightType,.hud, #controls, #reload, #toolbar {
 color: white;
 background-color: rgba(0, 0, 0, 0.71);
 }
@@ -56,7 +56,7 @@ background-color: rgba(0, 0, 0, 0.71);
   bottom: 0;
 
 }
-#p5_loading  > h1{
+#p5_loading  > h1 {
   display: flex;
   justify-content: center;
   align-content: center;
@@ -65,13 +65,11 @@ background-color: rgba(0, 0, 0, 0.71);
 }
 
 
-#reload {
+#toolbar {
   position: absolute;
-  z-index: 1;
+  z-index: 20;
   top: 0;
-  left:0;
 }
-
 #controls {
   position: absolute;
   z-index: 1;
@@ -83,6 +81,4 @@ background-color: rgba(0, 0, 0, 0.71);
   display:none;
 }
 
-.hide {
-  display: none;
-}
+ 

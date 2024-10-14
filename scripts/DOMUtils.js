@@ -10,9 +10,8 @@
 				addListener: (id, event, callback) => {
 					const input = document.getElementById(id)
 					if(input) return input.addEventListener(event, (e) => callback(e))
-				
 				},
-			  setOutput: (id, value) => document.getElementById(id).innerHTML = value,
+			  
 
 			
 		};

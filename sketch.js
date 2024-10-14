@@ -1,6 +1,7 @@
 let angle = 45
 let texturesMap
 let objectsMap
+let lightingMap
 let gameStart = true
 let cam1
 
@@ -8,6 +9,7 @@ let cam1
 function preload() {
 	objectsMap = ModelLoader().objectsMap
 	texturesMap = ModelLoader().texturesMap
+	lightingMap = ModelLoader().lightingMap
 }
 
 function setup() {
@@ -76,27 +78,41 @@ function loadRoom() {
 
 
 function loadObjects() {
-
+	
 	if (window.targetobjects) {
+		const {coordinates, rotation, scale: scale_, textures, id} = window.targetobjects
+    const convertRotation = (r) => devTools().degrees_to_radians(r)
+
 		push()
-		translate(window.targetobjects.coordinates[0], window.targetobjects.coordinates[1], window.targetobjects.coordinates[2])
-		rotateX(devTools().degrees_to_radians(window.targetobjects.rotation[0]))
-		rotateY(devTools().degrees_to_radians(window.targetobjects.rotation[1]))
-		rotateZ(devTools().degrees_to_radians(window.targetobjects.rotation[2]))
-		scale(window.targetobjects.scale)
-		texture(texturesMap[window.targetobjects.textures])
-		model(objectsMap[window.targetobjects.id])
+		translate(coordinates[0],coordinates[1], coordinates[2])
+		rotateX(convertRotation(rotation[0]))
+		rotateY(convertRotation(rotation[1]))
+		rotateZ(convertRotation(rotation[2]))
+		scale(scale_)
+		texture(texturesMap[textures])
+		model(objectsMap[id])
 		pop()
 	}
 
 }
 
+function loadGlobalLights() {
+	if (window.targetlighting) {
+		const {type,  color: colors_,  } = window.targetlighting
+		if(type === "ambient") {
+			ambientLight(colors_[0], colors_[1], colors_[2], 1);
+			specularMaterial(250); 
+
+		}
+	}
+
+ }
+
 function draw() {
 	background(0)
 	noStroke();
-
-
-	loadRoom()
-	loadObjects()
+	loadGlobalLights();
+	loadRoom();
+	loadObjects();
 	firstPerson(cam1)
 }

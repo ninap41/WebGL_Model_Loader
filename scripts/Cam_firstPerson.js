@@ -80,7 +80,7 @@ function firstPerson(cam) {
 	   cursor( 'crosshair', cam.firstPersonState.mousePrevX, cam.firstPersonState.mousePrevY) // Restore default cursor
 	}
 
-		document.getElementById("camera").innerHTML = `
+		document.getElementById("camera-translator").innerHTML = `
 		<div class="hud">
 		<h3>MOUSE </h3>
 		 pressed  ${mousePressed()}  <br><br>
