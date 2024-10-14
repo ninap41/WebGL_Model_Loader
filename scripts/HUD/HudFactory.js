@@ -9,9 +9,48 @@ class HudFactory {
 	maxProperties = null // properties that get displayed in HUD
 	dataSource = null // probably window.lighting
 	targetSourceId = null
-	sliderGroupIds = null
+	inputGroupIds = null
 	lightingTypes = ["point", "directional", "ambient"]
-
+  /*
+	going to use this to simplify renders
+	HUDS = {
+		"lighting": {
+			key: "lighting",
+			wrapperId: "lighting-container",
+			types:   ['ambient', 'point', 'directional'],
+			inputs:  ['type', ' color', 'coordinates'],
+			render: (hud) => { },
+			addHUDEventListeners: () => { }
+		},
+		"objects": {
+			key: "objects",
+			wrapperId: "objects-container",
+			types: null,
+			inputs:  [ 'scale', 'coordinates', 'rotation', 'passible' ],
+			render: (hud) => { 
+			
+			},
+			addHUDEventListeners: () => { }
+		},
+		"lighting-master": {
+			key: "lighting",
+			wrapperId: "lighting-container",
+			types:   ['ambient', 'point', 'directional'],
+			inputs:  ['type', ' color', 'coordinates'],
+			render: (hud) => { },
+			addHUDEventListeners: () => { }
+		},
+		"objects-master": {
+			key: "lighting",
+			wrapperId: "lighting-container",
+			types:   ['ambient', 'point', 'directional'],
+			inputs:  ['target','visible', 'passible'],
+			render: (hud) => { },
+			addHUDEventListeners: () => { }
+		},
+		
+	};
+	*/
 	HUDProps = {
 		coordinates: {
 			inputType: "range",
@@ -45,20 +84,23 @@ class HudFactory {
 			value: "scale",
 			minMax: [0.01, 5],
 		},
-		texture: {
+		passible: {
+			inputType: "checkbox",
+			label: "Can Walk Through?",
+			group: false,
+			value: "passible",
+		},
+		textures: {
 			inputType: "select",
 			label: "Texture",
 			group: false,
-			value: "texture",
-			targetPrefix: "target",
-
+			value: "textures",
 		},
 		type: {
 			inputType: "select",
 			label: "Scale",
 			group: false,
 			value: "type",
-			targetPrefix: "target",
 		},
 	};
 	constructor() {
@@ -71,7 +113,7 @@ class HudFactory {
 		this.wrapperId = `${key}-translator`
 		this.maxProperties = maxProperties; //for ambient lighting which limits display: ['coordinates', 'color']
 		this.targetSourceId = `target${key}` // onwindow
-		this.sliderGroupIds = this.getInputIds(maxProperties)
+		this.inputGroupIds = this.getInputIds(maxProperties)
 		this.template = ''
 		return this
 	}
@@ -108,15 +150,18 @@ class HudFactory {
 						},
 						inputType: this.HUDProps[propertyId].inputType
 					}
+					if(group[propertyId].value.label ==="Texture")		console.log(group)
+
 				}
 
 			})
+
 		return group
 	}
 
 
 	renderType = () => {
-		const { inputId, label, } = this.sliderGroupIds.type.value
+		const { inputId, label, } = this.inputGroupIds.type.value
 		const allOptions = this[`${this.key}Types`]
 		return `<br>${label}: &nbsp;
 		 <select id="${inputId}">
@@ -125,36 +170,93 @@ class HudFactory {
 		 </select>`
 	}
 
-	renderScale = () => {
-		const { label, inputId, outputId, inputType, minMax } = this.sliderGroupIds.scale.value
-		return `${label}: &nbsp;
-	<input type="${inputType}" id="${inputId}" ${inputType === 'range' ? `step=".1"` : ''} value="${window[`${this.targetSourceId}`].scale}" name="${inputId}"  min="${minMax[0]}" max="${minMax[1]}"  />
-	<label for="${inputId}">  ${window[`${this.targetSourceId}`].scale} <span id="${outputId}">${format(window[`${this.targetSourceId}`].scale)} </span> </label>`
+	renderInput =(propertyId) => {
+		const { label, inputId, outputId, inputType, minMax } = this.inputGroupIds[propertyId].value
+		return `
+		${label}: &nbsp;
+		<input 
+			type="${inputType}" 
+			class="input"
+			id="${inputId}" 
+			${inputType === 'range' ? `step=".1"` : ''} 
+			value="${window[`${this.targetSourceId}`].scale}" 
+			name="${inputId}"  
+			${minMax ? ` min="${minMax[0]}" max="${minMax[1]}"` : ''}  />
+		  <label for="${inputId}">  
+						${window[`${this.targetSourceId}`][propertyId]} 
+					<span id="${outputId}">
+						${format(window[`${this.targetSourceId}`][propertyId])}
+					</span> 	
+				</label>`
 	}
 
-	renderSelectTargetDropdown = () => {// [ 'light1', light2'] 
+
+
+	renderSelectTargetDropdown = ( ) => {// choose --> [ 'light1', light2'] 
 		const keyArrayOfAllOptions = Object.keys(window[`${this.key}`])
-		return `<br> Target: &nbsp;
+		return `Target: &nbsp;
 			<select id="target-${this.key}-select">
-					${keyArrayOfAllOptions.map((option) => `<option value="${option}" ${window[`${this.targetSourceId}`].id === option ? `selected="${option}"` : ``}>${option}</option>`)}
+					${keyArrayOfAllOptions.map((option) => `
+						<option value="${option}"  ${window[`${this.targetSourceId}`].id === option ? `selected="${option}"` : ``}>	
+							${option}
+						</option>`)}
 			</select><br>`
 	}
 
 
 	renderInputGroup = (groupId) => { // [ X Y Z]  [R G B] [RX RY RZ]
-		const { label, inputIds } = this.sliderGroupIds[groupId].values
+		const { label, inputIds,  outputIds, inputs, inputType, minMax } = this.inputGroupIds[groupId].values
 		let html = `<br> ${label}:<br>`
 		html += inputIds.map((targetId, idx) => {
-			const { outputIds, inputs, inputType, minMax } = this.sliderGroupIds[groupId].values
-			return `<input type="${inputType}"id="${targetId}"  value="${window[`${this.targetSourceId}`][groupId][idx]}" name="${targetId}"  min="${minMax[0]}" max="${minMax[1]}" ${inputType === 'range' ? `step=".1"` : ''} value="${window[`${this.targetSourceId}`][groupId][idx]}" />
-				<label for="${targetId}">  ${inputs[idx]} <span id="${outputIds[idx]}">${format(window[`${this.targetSourceId}`][groupId][idx])} </span> </label><br>`
+			return `
+				<input 
+						type="${inputType}"
+						id="${targetId}"  
+						value="${window[`${this.targetSourceId}`][groupId][idx]}" 
+						name="${targetId}"  
+						min="${minMax[0]}" max="${minMax[1]}" 
+						${inputType === 'range' ? `step=".1"` : ''} 
+						value="${window[`${this.targetSourceId}`][groupId][idx]}" />
+				<label for="${targetId}">  
+						${inputs[idx]} 
+						<span 
+								id="${outputIds[idx]}">
+										${format(window[`${this.targetSourceId}`][groupId][idx])} 
+						</span> 
+				</label><br>`
 		}).join('')
 		return html
 	}
 
+	renderSelect = (propertyId, options) => {// choose --> [ 'light1', light2'] 
+		console.log(propertyId)
+		console.log(this.inputGroupIds)
+		const { label, inputId, outputId  } = this.inputGroupIds[propertyId].value
+		const keyArrayOfAllOptions = Object.keys(options)
+	
+		return `${capitalize(label)} &nbsp;
+			<select id="${inputId}">
+					${keyArrayOfAllOptions.map((option) => {
+						console.log( `${window[`${this.targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}`)
+							return`
+						<option 
+						${window[`${this.targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}>	
+							${option}
+						</option>`
+																		 })}
+			</select><br>`
+	}
 
 	renderTitle = () => {
-		return `	<h2>${capitalize(this.key)} &nbsp;<i data-value="target-${this.key}" id="clipboard-${this.key}" class="fa-regular fa-clipboard fa-xs" style="color: #b3ffc9;"></i></h2>`
+		return `
+			<h2>${capitalize(this.key)} &nbsp;
+				<i 
+					data-value="target-${this.key}" 
+					id="clipboard-${this.key}" 
+					class="fa-regular fa-clipboard fa-xs" 
+					style="color: #b3ffc9;">
+				</i>
+			</h2>`
 	}
 
 	clearTemplate = () => this.template = ``
@@ -183,8 +285,8 @@ class HudFactory {
 		}
 		if (this.key === "objects") {
 			this.template +=
-				// this.renderTexture() +
-				this.renderScale() +
+				this.renderSelect("textures", window.textures) +
+				this.renderInput("scale") +
 				this.renderInputGroup("coordinates") +
 				this.renderInputGroup("rotation");
 		}
@@ -193,9 +295,8 @@ class HudFactory {
 	}
 
 	addInputGroupListeners = (propertyKey) => {
-		const { inputIds, outputIds } = this.sliderGroupIds[propertyKey].values
+		const { inputIds, outputIds } = this.inputGroupIds[propertyKey].values
 		inputIds.forEach((inputId, idx) => addListener(inputId, "input", (e) => {
-			console.log(e.target.value, "inputGROUPListener")
 			window[`target${this.key}`][propertyKey][idx] = e.target.value
 			getInput(outputIds[idx]).innerHTML = format(e.target.value)
 		}))
@@ -203,10 +304,13 @@ class HudFactory {
 	}
 
 	addInputListener = (propertyKey) => {
-		const { outputId } = this.sliderGroupIds[propertyKey].value
+		const { outputId, inputType } = this.inputGroupIds[propertyKey].value
+		
 		addListener(`${this.key}-${propertyKey}-input`, "input", (e) => {
+			console.log(" asdasd", e.target.value)
 			window[`target${this.key}`][propertyKey] = e.target.value
-	   	getInput(outputId).innerHTML = format(e.target.value)
+			if(outputId && getInput(outputId)) getInput(outputId).innerHTML = format(e.target.value)
+
 		})
 	}
 
@@ -215,12 +319,12 @@ class HudFactory {
 			window[`target${this.key}`] = window[this.key.toLowerCase()][e.target.value]
 			this.updateDOM()
 		})
-		
+
 		addListener(`clipboard-${this.key}`, "click", (e) => { // clipboard
 			navigator.clipboard.writeText(JSON.stringify(window[this.targetSourceId]))
 			alert(` <b>"${window[this.targetSourceId].id}"</b> Lighting instance  copied to clipboard\n Paste in 'lights'`)
 		})
-		
+
 		if (this.key === "lighting") {
 			this.addInputListener("type")
 			if (window[`target${this.key}`].type !== "ambient") {
@@ -232,6 +336,8 @@ class HudFactory {
 		}
 		else if (this.key === "objects") {
 			this.addInputListener("scale")
+			this.addInputListener("textures")
+
 			this.addInputGroupListeners("coordinates")
 			this.addInputGroupListeners("rotation")
 		}
@@ -246,9 +352,9 @@ class HudFactory {
 }
 
 window.lightingHUD = new HudFactory().build("lighting", window.targetLighting, ['coordinates', 'color', "type"])
-window.objectsHUD = new HudFactory().build("objects", window.targetObjects, ['coordinates', 'scale', 'rotation', 'texture', 'type'])
+window.objectsHUD = new HudFactory().build("objects", window.targetObjects, ['coordinates', 'scale', 'rotation', 'textures', 'type'])
 window.lightingHUD.render()
-	window.lightingHUD.addEventListeners()
+window.lightingHUD.addEventListeners()
 window.objectsHUD.render()
-	window.objectsHUD.addEventListeners()
+window.objectsHUD.addEventListeners()
 

@@ -1,5 +1,5 @@
 let angle = 45
-let textureMap
+let texturesMap
 let objectsMap
 let gameStart = true
 let cam1
@@ -7,7 +7,7 @@ let cam1
 
 function preload() {
 	objectsMap = ModelLoader().objectsMap
-	textureMap = ModelLoader().textureMap
+	texturesMap = ModelLoader().texturesMap
 }
 
 function setup() {
@@ -27,7 +27,7 @@ function loadRoom() {
 	push()
 	translate(0, 120, 0)
 	rotateX(PI / 2)
-	texture(textureMap["wood"])
+	texture(texturesMap["wood"])
 	plane(room.w, room.h)
 	pop()
 
@@ -35,7 +35,7 @@ function loadRoom() {
 	push()
 	translate(0, -115, 0)
 	rotateX(PI / 2)
-	texture(textureMap["wood"])
+	texture(texturesMap["wood"])
 	plane(room.w, room.h)
 	pop()
 
@@ -45,7 +45,7 @@ function loadRoom() {
 	fill(150)
 	translate(room.w + -room.center, 0, 0)
 	rotateY(PI / 2)
-	texture(textureMap["brick"])
+	texture(texturesMap["brick"])
 	plane(room.w, room.wallHeight)
 	pop()
 
@@ -53,7 +53,7 @@ function loadRoom() {
 	push()
 	translate(-room.w + room.center, 0, 0)
 	rotateY(PI / 2)
-	texture(textureMap["brick"])
+	texture(texturesMap["brick"])
 	plane(room.w, room.wallHeight) // Left wall
 	pop()
 
@@ -61,7 +61,7 @@ function loadRoom() {
 	push()
 	translate(0, 0, - room.center)
 	rotateY(PI)
-	texture(textureMap["brick"])
+	texture(texturesMap["brick"])
 	plane(room.w, room.wallHeight) // Left wall
 	pop()
 
@@ -69,7 +69,7 @@ function loadRoom() {
 	push()
 	translate(0, 0, + room.center)
 	rotateY(PI)
-	texture(textureMap["brick"])
+	texture(texturesMap["brick"])
 	plane(room.w, room.wallHeight) // Left wall
 	pop()
 }
@@ -84,7 +84,7 @@ function loadObjects() {
 		rotateY(devTools().degrees_to_radians(window.targetobjects.rotation[1]))
 		rotateZ(devTools().degrees_to_radians(window.targetobjects.rotation[2]))
 		scale(window.targetobjects.scale)
-		texture(textureMap[window.targetobjects.texture])
+		texture(texturesMap[window.targetobjects.textures])
 		model(objectsMap[window.targetobjects.id])
 		pop()
 	}

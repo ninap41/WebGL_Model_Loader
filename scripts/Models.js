@@ -7,11 +7,13 @@ window.lighting = {
 		"description": "dark ambient light",
 		"color": [0, 0, 0],
 
-		// constant (float) – coefficient for the constant term
-		// linear (float) – coefficient for the linear term
-		// quadratic (float) – coefficient for the quadratic term
-		// "lightFallOff": [],
-		// "lightSpecular": [],//rgb
+		
+		/* "lightFallOff": [ 
+				constant (float) – coefficient for the constant term,
+				 linear (float) – coefficient for the linear term,
+			 quadratic (float) – coefficient for the quadratic term
+		 ],
+		// "lightSpecular": [],//rgb */
 	},
 	"light2": {
 		"id": 'light2',
@@ -35,8 +37,9 @@ window.objects = {
 	desk: {
 		"id": "desk",
 		"path": "./assets/desk_tinker.obj",
-		"texture": "wood",
+		"textures": "wood",
 		"scale": 0.5,
+		"passible": false,
 		"coordinates": [-153, 81, -186],
 		"rotation": [90, 0, 0]
 	},
@@ -44,7 +47,8 @@ window.objects = {
 		"id": "plant",
 		"path": "./assets/plant.obj",
 		"scale": 1,
-		"texture": "plant",
+		"passible": false,
+		"textures": "plant",
 		"coordinates": [-10, 29, -226],
 		"rotation": [187, 0, 0]
 	}
