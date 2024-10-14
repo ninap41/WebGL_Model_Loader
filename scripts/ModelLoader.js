@@ -2,7 +2,6 @@
 const ModelLoader = () => {
 	const objectsMap = {}
 	const texturesMap = {}
-	const lightingMap = {}
 
 	Object.keys(window.objects).forEach((key) => {
 		objectsMap[key] = loadModel(window.objects[key].path, true)
@@ -11,9 +10,6 @@ const ModelLoader = () => {
 		texturesMap[key] = loadImage(window.textures[key])
 	})
 
-	Object.keys(window.lighting).forEach((key) => {
-		// lightingMap[key] = loadImage(window.lighting[key])
-	})
 	return { objectsMap, texturesMap, lightingMap }
 }
 

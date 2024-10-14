@@ -1,6 +1,6 @@
 /* class where chaining happens, return this for chaining */
 
-const { format, capitalize, getInput, hasClass, setOutput, addListener } = window.DOMUtils
+const { toggleShow, format,  capitalize, getInput, hasClass, setOutput, addListener } = window.DOMUtils
 
 
 class HudFactory {
@@ -153,15 +153,6 @@ class HudFactory {
 		return group
 	}
 
-	renderType = () => {
-		const { inputId, label, } = this.inputGroupIds.type.value
-		const allOptions = this[`${this.key}Types`]
-		return `<br>${label}: &nbsp;
-		 <select id="${inputId}">
-			 ${allOptions.map((option) => `<option value="${option}"` + `
-			 ${window[`${this.targetSourceId}`].type === option ? `selected="${option}"` : ``}>${option}</option>`)}
-		 </select>`
-	}
 
 	renderInput = (propertyId, callback) => {
 		const { label, inputId, outputId, inputType, minMax } = this.inputGroupIds[propertyId].value
@@ -292,12 +283,12 @@ class HudFactory {
 
 	}
 
-	addInputListener = (propertyKey) => {
+	addInputListener = (propertyKey, callback) => {
 		const { outputId, inputType } = this.inputGroupIds[propertyKey].value
 		addListener(`${this.key}-${propertyKey}-input`, "input", (e) => {
 			window[`target${this.key}`][propertyKey] = e.target.value
 			if (outputId && getInput(outputId)) getInput(outputId).innerHTML = format(e.target.value)
-
+			if(callback) callback()
 		})
 	}
 
@@ -312,11 +303,9 @@ class HudFactory {
 			alert(` <b>"${window[this.targetSourceId].id}"</b> Lighting instance  copied to clipboard\n Paste in 'lights'`)
 		})
 
-		addListener(`toolbar-${this.key}`, "click", (e) => this.toggleShow())
-
+		
 		if (this.key === "lighting") {
-
-			this.addInputListener("type")
+			this.addInputListener("type", () => this.updateDOM())
 			if (window[`target${this.key}`].type !== "ambient") {
 				console.log("ambient listener added")
 				this.addInputGroupListeners("color")
@@ -333,23 +322,21 @@ class HudFactory {
 			this.addInputGroupListeners("rotation")
 		}
 	}
-
-	toggleShow() {
-		const translatorWrapper = document.getElementById(this.wrapperId)
-		translatorWrapper.classList.contains("hide")
-			? translatorWrapper.classList.remove("hide") : translatorWrapper.classList.add("hide")
-	}
-
 	updateDOM() {
 		this.render()
 		this.addEventListeners()
 	}
 }
 
-window.lightingHUD = new HudFactory().build("lighting", window.targetLighting, ['coordinates', 'color', "type"])
-window.objectsHUD = new HudFactory().build("objects", window.targetObjects, ['coordinates', 'scale', 'rotation', 'textures', 'type'])
+window.lightingHUD = new HudFactory().build("lighting", window.targetLighting, ['coordinates', 'color', "type"]) 
+window.objectsHUD = new HudFactory().build("objects", window.targetObjects, ['coordinates', 'scale', 'rotation', 'textures', 'type']) 
 window.lightingHUD.render()
 window.lightingHUD.addEventListeners()
 window.objectsHUD.render()
 window.objectsHUD.addEventListeners()
+
+
+	addListener(`toolbar-camera`, "click", (e) => toggleShow(`camera-translator`, e))
+addListener(`toolbar-lighting`, "click", (e) => toggleShow(`lighting-translator`, e))
+addListener(`toolbar-objects`, "click", (e) => toggleShow(`objects-translator`, e))
 

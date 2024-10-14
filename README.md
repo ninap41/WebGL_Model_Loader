@@ -14,7 +14,9 @@ live-server
 ## controls
 
 * mouse click to toggle orbital controls
-* use WASD 
+* use WASD
+
+![Screenshot of the application2](https://raw.githubusercontent.com/ninap41/WebGL_Model_Loader/refs/heads/main/assets/screenshot2.png)
 ![Screenshot of the application](https://raw.githubusercontent.com/ninap41/WebGL_Model_Loader/refs/heads/main/assets/screenshot1.png)
 
 ## to do

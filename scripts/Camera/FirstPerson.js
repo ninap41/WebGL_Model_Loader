@@ -1,15 +1,14 @@
-// Function to lock pointer
+const { format, toggleShow, capitalize, getInput, hasClass, setOutput, addListener } = window.DOMUtils
 let movedX = 0
 let movedY = 0
 let pmouseX = 0
 let pmouseY = 0
-/* to do - move center mouse https://www.geeksforgeeks.org/how-to-move-mouse-pointer-to-a-specific-position-using-javascript/ */
-
 
 function firstPerson(cam) {
 	cam.perspective(0.5)
 	const moveSpeed = 10
-	const lookSpeed = .5; // the implementation of this may be incorrect, but it works for now. remove multiplication at camX, Y, Z and figure out where to multiple properly ( to do)
+	const lookSpeed = .5;
+
 // const startingState = {
 // 	"azimuth":-1.5707963267948966,"zenith":0,"lookAtDist":0,"mousePrevX":546,"mousePrevY":406.5
 // }
@@ -20,11 +19,8 @@ function firstPerson(cam) {
 		mousePrevX: mouseX / 2 + mouseX,
 		mousePrevY:  mouseY / 2 + mouseY,
 	}
-		// 	console.log(JSON.stringify( cam.firstPersonState ))
-		// noLoop()
-		// Look around controls
+
 	/*
-	
 	(mouseX / 2 + mouseX) && (mouseY / 2 + mouseY) 
 	!!this LOGIC is so IMPORTANT when activating the cursor. it offsets the position of the cursor that the center of the screen is at 0,0 vector */
 	if (window.pointerLock) {
@@ -67,7 +63,7 @@ function firstPerson(cam) {
 			cam.eyeX, // position of person
 			cam.eyeY,
 			cam.eyeZ,
-			cam.centerX,// rotation of cameraww
+			cam.centerX, // rotation of cameraww
 			cam.centerY,
 			cam.centerZ, 
 			0,
@@ -79,12 +75,10 @@ function firstPerson(cam) {
 	} else {
 	   cursor( 'crosshair', cam.firstPersonState.mousePrevX, cam.firstPersonState.mousePrevY) // Restore default cursor
 	}
-
-		document.getElementById("camera-translator").innerHTML = `
+	document.getElementById("camera-translator") .innerHTML = `
 		<div class="hud">
 		<h3>MOUSE </h3>
 		 pressed  ${mousePressed()}  <br><br>
-
 			pmouseX  ${Math.floor(pmouseX)}  <br>
 		 pmouseY  ${Math.floor(pmouseY)}<br>
 		movedX  ${Math.floor(movedX)}  <br>
@@ -102,6 +96,6 @@ function firstPerson(cam) {
 		   centerZ ${devTools().colorKey(Math.floor(cam.centerZ))}<br></div> 
 			 `
 		/* camera([x], [y], [z], [centerX], [centerY], [centerZ], [upX], [upY], [upZ]) */
-	
 }
+
 p5.prototype.registerMethod("firstPerson", firstPerson)

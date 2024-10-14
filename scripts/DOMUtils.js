@@ -11,9 +11,14 @@
 					const input = document.getElementById(id)
 					if(input) return input.addEventListener(event, (e) => callback(e))
 				},
+			toggleShow: (id, e ) => {
+				const wrapper = document.getElementById(id)
+				wrapper.classList.contains("hide")
+					? wrapper.classList.remove("hide") : wrapper.classList.add("hide")
+			}
 			  
 
 			
 		};
-		global. DOMUtils =  DOMUtils
+		global.DOMUtils =  DOMUtils
 })(window);

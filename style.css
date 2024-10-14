@@ -81,4 +81,8 @@ background-color: rgba(0, 0, 0, 0.71);
   display:none;
 }
 
+#toolbar {
+  display: flex;
+  flex-direction: column;
+}
  
