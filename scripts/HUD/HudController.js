@@ -1,6 +1,53 @@
 /* class where chaining happens, return this for chaining */
 
-const { toggleShow, format,  capitalize, getInput, hasClass, setOutput, addListener } = window.DOMUtils
+const { toggleShow, format, capitalize, getInput, hasClass, setOutput, addListener, renderInput, renderSelect_ } = window.DOMUtils
+
+/*
+going to use this to simplify renders
+*/
+const HUDS = {
+	"lighting": {
+		wrapperId: "lighting-container",
+		shown: true,
+		types: ['ambient', 'point', 'directional'],
+		inputs: ['type', ' color', 'coordinates'],
+		render: (self) => {
+			
+		},
+		addHUDEventListeners: () => { }
+	},
+	"objects": {
+		wrapperId: "objects-container",
+		shown: true,
+		types: null,
+		inputs: ['scale', 'coordinates', 'rotation', 'passible'],
+		render: (f) => { },
+		addHUDEventListeners: () => { }
+	},
+	"lighting-master": {
+		shown: true,
+
+		wrapperId: "lighting-container",
+		types: ['ambient', 'point', 'directional'],
+		inputs: ['type', ' color', 'coordinates'],
+		render: (f) => {
+
+		},
+		addHUDEventListeners: () => { }
+	},
+	"objects-master": {
+		shown: true,
+		wrapperId: "lighting-container",
+		types: ['ambient', 'point', 'directional'],
+		inputs: ['target', 'visible', 'passible'],
+		render: (f) => {
+
+		},
+		addHUDEventListeners: () => { }
+	},
+
+};
+
 
 
 class HudFactory {
@@ -12,46 +59,6 @@ class HudFactory {
 	targetSourceId = null
 	inputGroupIds = null
 	lightingTypes = ["point", "directional", "ambient"]
-	/*
-	going to use this to simplify renders
-	HUDS = {
-		"lighting": {
-			key: "lighting",
-			wrapperId: "lighting-container",
-			types:   ['ambient', 'point', 'directional'],
-			inputs:  ['type', ' color', 'coordinates'],
-			render: (hud) => { },
-			addHUDEventListeners: () => { }
-		},
-		"objects": {
-			key: "objects",
-			wrapperId: "objects-container",
-			types: null,
-			inputs:  [ 'scale', 'coordinates', 'rotation', 'passible' ],
-			render: (hud) => { 
-			
-			},
-			addHUDEventListeners: () => { }
-		},
-		"lighting-master": {
-			key: "lighting",
-			wrapperId: "lighting-container",
-			types:   ['ambient', 'point', 'directional'],
-			inputs:  ['type', ' color', 'coordinates'],
-			render: (hud) => { },
-			addHUDEventListeners: () => { }
-		},
-		"objects-master": {
-			key: "lighting",
-			wrapperId: "lighting-container",
-			types:   ['ambient', 'point', 'directional'],
-			inputs:  ['target','visible', 'passible'],
-			render: (hud) => { },
-			addHUDEventListeners: () => { }
-		},
-		
-	};
-	*/
 	HUDProps = {
 		coordinates: {
 			inputType: "range",
@@ -72,7 +79,6 @@ class HudFactory {
 			inputType: "range",
 			label: "Rotation",
 			group: true,
-
 			inputs: ["RX", "RY", "RZ"],
 			minMax: [-360, 360],
 		},
@@ -87,108 +93,69 @@ class HudFactory {
 			inputType: "checkbox",
 			label: "Can Walk Through?",
 			group: false,
-			value: "passible",
 		},
 		textures: {
 			inputType: "select",
 			label: "Texture",
 			group: false,
-			value: "textures",
 		},
 		type: {
 			inputType: "select",
 			label: "Light Type",
 			group: false,
-			value: "type",
 		},
 	};
-	constructor() {
+	constructor(HUDS_) {
+		this.HUDS = HUDS_
 		return this
 	}
 
 	build(key, targetSource, maxProperties) {
+		
 		this.targetSource = targetSource
 		this.key = key
 		this.wrapperId = `${key}-translator`
 		this.maxProperties = maxProperties; //for ambient lighting  
 		this.targetSourceId = `target${key}` // onwindow
-		this.inputGroupIds = this.getInputIds(maxProperties)
+		this.inputGroupIds = this.generateInputIds(maxProperties)
 		this.template = ''
 		return this
 	}
 
-	getInputIds(properties) {
-		var group = {}
+	generateInputIds(properties) {
+		var obj = {}
 		properties	/* propertyId ->  coordinates, color, rotation, scale, texture, type propertyAxis -> X, Y, Z, R, G, B, RX, RY, RZ, Scale */
 			.forEach((propertyId) => {
-				if (this.HUDProps[propertyId].group) {// GROUP input
-					const generateGroupIds = (type) => this.HUDProps[propertyId].inputs.map((propertyAxis) => `${this.key}-${propertyAxis}-${type}`)
-					group[propertyId] = { // group props include rotation, color, coordinates
-						value: {
-							group: this.HUDProps[propertyId].group,
-							inputs: this.HUDProps[propertyId].inputs,
-							label: this.HUDProps[propertyId].label,
-							minMax: this.HUDProps[propertyId].minMax,
-							inputType: this.HUDProps[propertyId].inputType,
-							inputIds: generateGroupIds('input'),
-							outputIds: generateGroupIds('output'),
-						},
-						inputType: this.HUDProps[propertyId].inputType
-					}
-				} else { // single input
+				const {group: group_, inputs } =  this.HUDProps[propertyId]
+				obj[propertyId] = this.HUDProps[propertyId]
+				if (group_) {
+					const generateGroupIds = (type) => inputs.map((propertyAxis) => `${this.key}-${propertyAxis}-${type}`)
+					obj[propertyId].inputIds = generateGroupIds('input')
+					obj[propertyId].outputIds = generateGroupIds('output')
+				} else {
 					const generateId = (type) => `${this.key}-${propertyId}-${type}`
-					group[propertyId] = { // non group props include scale, texture, and type
-						group: this.HUDProps[propertyId].group,
-						value: {
-							label: this.HUDProps[propertyId].label,
-							inputType: this.HUDProps[propertyId].inputType,
-							minMax: this.HUDProps[propertyId].minMax,
-							inputId: generateId('input'),
-							outputId: generateId('output'),
-						},
-						inputType: this.HUDProps[propertyId].inputType
-					}
+					obj[propertyId].inputId = generateId('input')
+					obj[propertyId].outputId = generateId('output')
 				}
 			})
-		return group
+		return obj
 	}
 
 
-	renderInput = (propertyId, callback) => {
-		const { label, inputId, outputId, inputType, minMax } = this.inputGroupIds[propertyId].value
-		return `
-		${label}: &nbsp;
-		<input 
-			type="${inputType}" 
-			class="input"
-			id="${inputId}" 
-			${inputType === 'range' ? `step=".1"` : ''} 
-			value="${window[`${this.targetSourceId}`].scale}" 
-			name="${inputId}"  
-			${minMax ? ` min="${minMax[0]}" max="${minMax[1]}"` : ''}  />
-		  <label for="${inputId}">  
-					<span id="${outputId}">
-						${format(window[`${this.targetSourceId}`][propertyId])}
-					</span> 	
-				</label>`
+	createPropertyInput(propertyId) {
+		
+		return renderInput(propertyId, this.targetSourceId, this.inputGroupIds[propertyId])
 	}
 
-
-
-	renderSelectTargetDropdown = () => {// choose --> [ 'light1', light2'] 
+	createTargetSelectDropdown = () => {// choose --> [ 'light1', light2'] 
 		const keyArrayOfAllOptions = Object.keys(window[`${this.key}`])
-		return `Target: &nbsp;
-			<select id="target-${this.key}-select">
-					${keyArrayOfAllOptions.map((option) => `
-						<option value="${option}"  ${window[`${this.targetSourceId}`].id === option ? `selected="${option}"` : ``}>	
-							${option}
-						</option>`)}
-			</select><br>`
+		const context = { sourceObj: window, key: this.key, targetSourceId: this.targetSourceId}
+		return renderSelect_(keyArrayOfAllOptions, context)
 	}
 
 
 	renderInputGroup = (groupId) => { // [ X Y Z]  [R G B] [RX RY RZ]
-		const { label, inputIds, outputIds, inputs, inputType, minMax } = this.inputGroupIds[groupId].value
+		const { label, inputIds, outputIds, inputs, inputType, minMax } = this.inputGroupIds[groupId]
 		let html = `<br> ${label}:<br>`
 		html += inputIds.map((targetId, idx) => {
 			return `
@@ -212,7 +179,7 @@ class HudFactory {
 	}
 
 	renderSelect = (propertyId, options) => {// choose --> [ 'light1', light2'] 
-		const { label, inputId } = this.inputGroupIds[propertyId].value
+		const { label, inputId } = this.inputGroupIds[propertyId]
 		const allOptions = Array.isArray(options) ? options : Object.keys(options)
 		return `${capitalize(label)} &nbsp;
 			<select id="${inputId}">
@@ -243,7 +210,7 @@ class HudFactory {
 
 	render = async () => { // generates the dom
 		this.template = this.clearTemplate();
-		this.template = this.renderTitle() + this.renderSelectTargetDropdown()
+		this.template = this.renderTitle() + this.createTargetSelectDropdown()
 
 		//GUTS
 		if (this.key === "lighting") {
@@ -266,7 +233,7 @@ class HudFactory {
 		if (this.key === "objects") {
 			this.template +=
 				this.renderSelect("textures", window.textures) +
-				this.renderInput("scale") +
+				this.createPropertyInput("scale") +
 				this.renderInputGroup("coordinates") +
 				this.renderInputGroup("rotation");
 		}
@@ -275,7 +242,7 @@ class HudFactory {
 	}
 
 	addInputGroupListeners = (propertyKey) => {
-		const { inputIds, outputIds } = this.inputGroupIds[propertyKey].value
+		const { inputIds, outputIds } = this.inputGroupIds[propertyKey]
 		inputIds.forEach((inputId, idx) => addListener(inputId, "input", (e) => {
 			window[`target${this.key}`][propertyKey][idx] = e.target.value
 			getInput(outputIds[idx]).innerHTML = format(e.target.value)
@@ -284,11 +251,11 @@ class HudFactory {
 	}
 
 	addInputListener = (propertyKey, callback) => {
-		const { outputId, inputType } = this.inputGroupIds[propertyKey].value
+		const { outputId, inputType } = this.inputGroupIds[propertyKey]
 		addListener(`${this.key}-${propertyKey}-input`, "input", (e) => {
 			window[`target${this.key}`][propertyKey] = e.target.value
 			if (outputId && getInput(outputId)) getInput(outputId).innerHTML = format(e.target.value)
-			if(callback) callback()
+			if (callback) callback()
 		})
 	}
 
@@ -303,7 +270,7 @@ class HudFactory {
 			alert(` <b>"${window[this.targetSourceId].id}"</b> Lighting instance  copied to clipboard\n Paste in 'lights'`)
 		})
 
-		
+
 		if (this.key === "lighting") {
 			this.addInputListener("type", () => this.updateDOM())
 			if (window[`target${this.key}`].type !== "ambient") {
@@ -328,15 +295,15 @@ class HudFactory {
 	}
 }
 
-window.lightingHUD = new HudFactory().build("lighting", window.targetLighting, ['coordinates', 'color', "type"]) 
-window.objectsHUD = new HudFactory().build("objects", window.targetObjects, ['coordinates', 'scale', 'rotation', 'textures', 'type']) 
+window.lightingHUD = new HudFactory(HUDS).build("lighting", window.targetLighting, ['coordinates', 'color', "type"])
+window.objectsHUD = new HudFactory(HUDS).build("objects", window.targetObjects, ['coordinates', 'scale', 'rotation', 'textures', 'type'])
 window.lightingHUD.render()
 window.lightingHUD.addEventListeners()
 window.objectsHUD.render()
 window.objectsHUD.addEventListeners()
 
 
-	addListener(`toolbar-camera`, "click", (e) => toggleShow(`camera-translator`, e))
+addListener(`toolbar-camera`, "click", (e) => toggleShow(`camera-translator`, e))
 addListener(`toolbar-lighting`, "click", (e) => toggleShow(`lighting-translator`, e))
 addListener(`toolbar-objects`, "click", (e) => toggleShow(`objects-translator`, e))
 

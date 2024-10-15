@@ -15,16 +15,23 @@ function preload() {
 function setup() {
 	window.canvas = createCanvas(windowWidth, windowHeight, WEBGL)
 	cam1 = createCamera()
+	
 }
 
 function loadRoom() {
 	let room = {
 		w: 500,
 		h: 500,
+		leftTransparent: false,
+		rightTransparent: false,
+		frontTransparent: true,
+		backTransparent: false,
+
+
 		wallHeight: 250,
 		center: 250,
 	}
-	
+	// frustum(); what the hell was this for?
 	// Draw a floor
 	push()
 	translate(0, 120, 0)
@@ -33,6 +40,18 @@ function loadRoom() {
 	plane(room.w, room.h)
 	pop()
 
+	
+	push ()
+
+	translate(0, 120, 0)
+	texture(texturesMap["wood"])
+	let c = color(255, 0, 0);
+	directionalLight(c, 0, 1, 0);
+
+	// last parameter, position sets the light’s position using a p5.Vector object. For example, pointLight(255, 0, 0, lightPos)
+	cylinder(1000, 1);
+
+	pop()
 	// Draw a ceiling
 	push()
 	translate(0, -115, 0)
@@ -67,8 +86,9 @@ function loadRoom() {
 	plane(room.w, room.wallHeight) // Left wall
 	pop()
 
-	// //Front
+	// Front facing player
 	push()
+	if( room.frontTransparent ) blendMode('exclusion')
 	translate(0, 0, + room.center)
 	rotateY(PI)
 	texture(texturesMap["brick"])
@@ -113,6 +133,8 @@ function draw() {
 	noStroke();
 	loadGlobalLights();
 	loadRoom();
+	 // blendMode(EXCLUSION); for making glass
 	loadObjects();
+
 	firstPerson(cam1)
 }

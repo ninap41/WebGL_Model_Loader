@@ -6,7 +6,7 @@ window.lighting = {
 		"type": "ambient",
 		"description": "dark ambient light",
 		"coordinates":[0,0,0],
-		"color": [127.3, 109.8, 43.5],
+		"color": [150, 160, 220],
 	},
 	"light2": {
 		"id": 'light2',

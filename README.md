@@ -11,6 +11,7 @@ live-server
 [Live Server Documentation](https://www.npmjs.com/package/live-server)
 
 
+
 ## controls
 
 * mouse click to toggle orbital controls
@@ -21,4 +22,11 @@ live-server
 
 ## to do
 
+* plane hud, treat them different then obj loaded objects.
+* Look into adding bootstrap or abstracting out templating engine like code to another file
 * collision detection for recusively detecting impassible planes
+* orbital control toggle for devConfig
+* add All Objects, Lighting,  Hud
+* add spectral lighting support
+* object animation mutations
+* hook up to a quick serverless option like Deno for saving "scenes" or at the very LEAST download a JSON blob of lighting/objects/
