@@ -39,11 +39,9 @@
 							${format(window[`${targetSourceId}`][propertyId])}
 						</span> 	
 					</label>`
- 
-		
 	}
 
-	const renderSelect_ = (options, context) => {
+	const renderTargetSelectDropdown = (options, context) => {
 		let { sourceObj, key, targetSourceId, label } = context
 		return `Target: &nbsp;
 			<select id="target-${key}-select">
@@ -53,7 +51,47 @@
 						</option>`)}
 			</select><br>`
 	}
+	
+	const renderInputGroup = (groupName, sourceObj, context) => {
+		const {  targetSourceId, label, options, inputIds, inputType, targetId, minMax, outputIds, inputs } = context
+	let html =  `<br> ${label}:<br>`
+			html += inputIds.map((targetId, idx) => {
+				return `
+					<input 
+							type="${inputType}"
+							id="${targetId}"  
+							value="${sourceObj[`${targetSourceId}`][groupName][idx]}" 
+							name="${targetId}"  
+							${minMax ? ` min="${minMax[0]}" max="${minMax[1]}"` : ''} 
+							${inputType === 'range' ? `step=".1"` : ''} 
+							value="${sourceObj[`${targetSourceId}`][groupName][idx]}" />
+					<label for="${targetId}">  
+							${inputs[idx]} 
+							<span 
+									id="${outputIds[idx]}">
+											${format(window[`${targetSourceId}`][groupName][idx])} 
+							</span> 
+					</label><br>`
+			}).join('')
+			return html
+	}
 
+
+	const renderSelect = (propertyId, options, sourceObj, targetSourceId, context) => {// choose --> [ 'light1', light2'] 
+		const { label, inputId } = context
+		const allOptions = Array.isArray(options) ? options : Object.keys(options)
+		return `${capitalize(label)} &nbsp;
+			<select id="${inputId}">
+					${allOptions.map((option) => {
+			console.log(`${window[`${targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}`)
+			return `
+						<option 
+						${window[`${targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}>	
+							${option}
+						</option>`
+		})}
+			</select><br>`
+	}
 
 	global.DOMUtils = {
 		format,
@@ -63,7 +101,10 @@
 		addListener,
 		toggleShow,
 		renderInput,
-		renderSelect_,
+		renderTargetSelectDropdown,
+		renderInputGroup,
+		renderSelect
+		
 	}
 })(window);
 

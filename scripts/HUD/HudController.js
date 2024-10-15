@@ -1,6 +1,6 @@
 /* class where chaining happens, return this for chaining */
 
-const { toggleShow, format, capitalize, getInput, hasClass, setOutput, addListener, renderInput, renderSelect_ } = window.DOMUtils
+const { toggleShow, format, capitalize, getInput, hasClass, setOutput, addListener, renderInput, renderTargetSelectDropdown, renderInputGroup, renderSelect } = window.DOMUtils
 
 /*
 going to use this to simplify renders
@@ -142,61 +142,23 @@ class HudFactory {
 	}
 
 
-	createPropertyInput(propertyId) {
-		
-		return renderInput(propertyId, this.targetSourceId, this.inputGroupIds[propertyId])
-	}
+	// choose --> [----*-----] 
+	createPropertyInput= (propertyId) => renderInput(propertyId, this.targetSourceId, this.inputGroupIds[propertyId])
 
-	createTargetSelectDropdown = () => {// choose --> [ 'light1', light2'] 
+	// choose --> [ 'light1', light2'] 
+	createTargetSelectDropdown = () => {
 		const keyArrayOfAllOptions = Object.keys(window[`${this.key}`])
-		const context = { sourceObj: window, key: this.key, targetSourceId: this.targetSourceId}
-		return renderSelect_(keyArrayOfAllOptions, context)
+		return renderTargetSelectDropdown (Object.keys(window[`${this.key}`]), { sourceObj: window, key: this.key, targetSourceId: this.targetSourceId})
 	}
 
+	// [ X Y Z]  [R G B] [RX RY RZ]
+	createPropertyInputGroup = (groupName) => renderInputGroup( groupName, window, {targetSourceId:this.targetSourceId, ...this.inputGroupIds[groupName]})
 
-	renderInputGroup = (groupId) => { // [ X Y Z]  [R G B] [RX RY RZ]
-		const { label, inputIds, outputIds, inputs, inputType, minMax } = this.inputGroupIds[groupId]
-		let html = `<br> ${label}:<br>`
-		html += inputIds.map((targetId, idx) => {
-			return `
-				<input 
-						type="${inputType}"
-						id="${targetId}"  
-						value="${window[`${this.targetSourceId}`][groupId][idx]}" 
-						name="${targetId}"  
-						min="${minMax[0]}" max="${minMax[1]}" 
-						${inputType === 'range' ? `step=".1"` : ''} 
-						value="${window[`${this.targetSourceId}`][groupId][idx]}" />
-				<label for="${targetId}">  
-						${inputs[idx]} 
-						<span 
-								id="${outputIds[idx]}">
-										${format(window[`${this.targetSourceId}`][groupId][idx])} 
-						</span> 
-				</label><br>`
-		}).join('')
-		return html
-	}
-
-	renderSelect = (propertyId, options) => {// choose --> [ 'light1', light2'] 
-		const { label, inputId } = this.inputGroupIds[propertyId]
-		const allOptions = Array.isArray(options) ? options : Object.keys(options)
-		return `${capitalize(label)} &nbsp;
-			<select id="${inputId}">
-					${allOptions.map((option) => {
-			console.log(`${window[`${this.targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}`)
-			return `
-						<option 
-						${window[`${this.targetSourceId}`][propertyId] === option ? `selected="${option}"` : ``}>	
-							${option}
-						</option>`
-		})}
-			</select><br>`
-	}
-
+	createPropertySelect = (propertyId, options) => renderSelect(propertyId, options, window, this.targetSourceId,  this.inputGroupIds[propertyId])
+	
 	renderTitle = () => {
 		return `
-			<h2>${capitalize(this.key)} &nbsp;
+			<h2>Target ${capitalize(this.key)} &nbsp;
 				<i 
 					data-value="target-${this.key}" 
 					id="clipboard-${this.key}" 
@@ -217,28 +179,28 @@ class HudFactory {
 			const type = window[`${this.targetSourceId}`].type
 			if (type === "ambient") {
 				this.template +=
-					this.renderSelect('type', ['ambient', 'point', 'directional']) +
-					this.renderInputGroup("color") +
-					`<div id="` + this.key + `-color"></div>` +
-					`<div id=` + this.key + `-coordinates"></div>`
+					this.createPropertySelect('type', ['ambient', 'point', 'directional']) +
+					this.createPropertyInputGroup("color")
 			} else {
 				this.template +=
-					this.renderSelect('type', ['ambient', 'point', 'directional']) +
-					this.renderInputGroup("coordinates") +
-					`<div id="` + this.key + `-color"></div>` +
-					` <div id=` + this.key + `-coordinates"></div>`
+					this.createPropertySelect('type', ['ambient', 'point', 'directional']) +
+					this.createPropertyInputGroup("coordinates") +
+				this.createPropertyInputGroup("color")
+
+				
 			}
 			this.template += `<p> To do, color change on axises, add texture, add falloff, update Sketchjs for target Object.  And Toggling on other objects that are not target objects.</p>`
 		}
 		if (this.key === "objects") {
 			this.template +=
-				this.renderSelect("textures", window.textures) +
+				this.createPropertySelect("textures", window.textures) +
 				this.createPropertyInput("scale") +
-				this.renderInputGroup("coordinates") +
-				this.renderInputGroup("rotation");
+				this.createPropertyInputGroup("coordinates") +
+				this.createPropertyInputGroup("rotation");
 		}
 		document.getElementById(this.wrapperId).innerHTML = this.template
-		return
+		
+		 
 	}
 
 	addInputGroupListeners = (propertyKey) => {
@@ -284,7 +246,6 @@ class HudFactory {
 		else if (this.key === "objects") {
 			this.addInputListener("scale")
 			this.addInputListener("textures")
-
 			this.addInputGroupListeners("coordinates")
 			this.addInputGroupListeners("rotation")
 		}

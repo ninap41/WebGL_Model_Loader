@@ -18,20 +18,26 @@
 	<script src="scripts/DevTools.js" defer></script>
 	<script src="scripts/DOMUtils.js"  ></script>
 	<div id="toolbar">
-		<h4>Hide Toggles</h4>
-			<label> <input type="checkbox" class="custom-checkbox" data-key="objects" id="toolbar-objects"> Objects </label>
-			<label> <input type="checkbox" class="custom-checkbox" data-key="lighting"id="toolbar-lighting"> Lighting</label>
-			<label> <input type="checkbox" class="custom-checkbox" data-key="objects"id="toolbar-camera"> Camera </label> <br>
+			<label for="checkbox"> 
+				<input type="checkbox" class="custom-checkbox" checked data-key="objects" id="toolbar-objects"> 	
+				<i id="toolbar-icons" class="fa-solid fa-bullseye fa-sm"  style="color: #b3ffc9;"></i> 
+				<i id="toolbar-icons" class="fa-solid fa-box fa-sm"  style="color: #b3ffc9;"></i> 
+				Object
+
+			</label>
+			<label> <input type="checkbox" class="custom-checkbox" checked data-key="lighting"id="toolbar-lighting">
+				<i id="toolbar-icons" class="fa-solid fa-bullseye fa-sm"  style="color: #b3ffc9;"></i> 
+			<i id="toolbar-icons" class="fa-regular fa-lightbulb fa-sm"   style="color: #b3ffc9;"></i> 
+			Lighting
+			</label>
+			<label> <input type="checkbox" class="custom-checkbox" checked data-key="objects"id="toolbar-camera"> 
+				<i id="toolbar-icons" class="fa-solid fa-bullseye fa-sm"  style="color: #b3ffc9;"></i> 
+			<i id="toolbar-icons" class="fa-solid fa-camera fa-sm"  style="color: #b3ffc9;"></i> 
+				 Camera
+</label> <br>
 		<button id="reload" onclick=" window.location.reload()">Reload</button>
 	</div>
-	
-	<!-- <div id="toolbar">
-		<button id="toolbar-lighting">Lighting</button>
-			<button id="toolbar-objects">Objects</button>
-		<button id="toolbar-camera">Camera</button>
-		<button id="reload" onclick=" window.location.reload()">Reload</button>
 
-	</div> -->
 
 	<div id="camera-translator" class="hover-stats"></div>
 	<p id="controls" onclick=" window.location.reload()"><br> Press 'C' to enable W-A-S-D Controls & look around mode with
