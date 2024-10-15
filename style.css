@@ -19,6 +19,7 @@ div#hud-container {
   display: flex;
   overflow: auto;
   height: 50%;
+  border-radius: 8px;
 }
 
 .translator-items {
