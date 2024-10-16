@@ -205,7 +205,10 @@ class HudFactory {
 
 	addInputGroupListeners = (propertyKey) => {
 		const { inputIds, outputIds } = this.inputGroupIds[propertyKey]
+		console.log(inputIds, "hello")
 		inputIds.forEach((inputId, idx) => addListener(inputId, "input", (e) => {
+			const value = e.target.value
+			console.log(value, "VAL!")
 			window[`target${this.key}`][propertyKey][idx] = e.target.value
 			getInput(outputIds[idx]).innerHTML = format(e.target.value)
 		}))
@@ -238,8 +241,8 @@ class HudFactory {
 			if (window[`target${this.key}`].type !== "ambient") {
 				console.log("ambient listener added")
 				this.addInputGroupListeners("color")
-			} else {
 				this.addInputGroupListeners("coordinates")
+			} else {
 				this.addInputGroupListeners("color")
 			}
 		}
